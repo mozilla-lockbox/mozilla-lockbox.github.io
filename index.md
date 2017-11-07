@@ -9,7 +9,6 @@
 
 ## Development Process
 
-* Task list: prioritized using cross-repo [Projects in GitHub](https://github.com/orgs/mozilla-lockbox/projects)
 * Daily standup: async but prompted by "geekbot" at 3 PM Mountain
 * All code in Git(Hub)
   * PR -> Review -> Merge (optimistic)
