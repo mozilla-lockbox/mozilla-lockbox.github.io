@@ -21,8 +21,6 @@ The complete interactive sign in flow for an FxA OAuth client is:
 6. If user information is needed, the client sends an HTTPS `GET` request to the FxA userinfo endpoint (providing the access token as authorization)
 7. The FxA userinfo endpoint validates the authorization and (upon success) provides the user's profile information
 
-FxA access tokens are valid for 1209600 seconds (two weeks) by default, and can be revoked; FxA refresh tokens never expire and can be revoked.
-
 The hosted FxA deployments support [endpoint discovery](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/Firefox_Accounts/Introduction#Endpoint_Discovery) as well as [documented details](https://developer.mozilla.org/en-US/docs/Mozilla/Tech/Firefox_Accounts/Introduction#Firefox_Accounts_deployments).
 
 ### Authentication and Authorization ###
@@ -83,7 +81,7 @@ If the client's access token is expired and it has a refresh token, it can reque
 * `client_id` - The client's provisioned identifier
 * `refresh_token` - The refresh token from the initial token exchange response
 
-The FxA token endpoint validates the requeset parameters, and (upon success) returns the updated token information (at a minimum the following):
+The FxA token endpoint validates the request parameters, and (upon success) returns the updated token information (at a minimum the following):
 
 * `access_token` - The (Bearer) access token used in other resource requests
 * `token_type` (**== `bearer`**) - The type of access token
@@ -152,7 +150,26 @@ Once the client receives the response from the initial token exchange, the encry
 
 The client decrypts this JWE using its **private** ECDH key, and parses the resulting plaintext as the JSON above
 
+### Token Notes ###
+
+FxA access tokens are valid for 1209600 seconds (two weeks) by default, and can be revoked; FxA refresh tokens never expire and can be revoked.  One more more of these tokens are revoked when:
+
+* The user changes their password
+* The user resets their account (forgotten password) 
+* The `POST /v1/destroy` RESTful API is called
+
 ## User Profile Information ##
+
+Information about the signed in user can be obtained from the FxA userinfo endpoint.
+
+The client sends an HTTPS `GET` request to the endpoint, including the HTTP `Authorization` header set to `Bearer ` and the access token.
+
+The userinfo endpoint validates the access token, and (upon success) provides at least the following information as "application/json":
+
+* `uid` - The user identifier string
+* `email` - The user's primary email address
+
+**WARNING**: The user's email address should not be stored unencrypted without their consent.
 
 ## Browser Extension ##
 
