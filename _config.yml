@@ -1,1 +1,9 @@
-theme: jekyll-theme-minimal
+title: Lockbox
+author: Mozilla
+email: lockbox-dev@mozilla.com
+github_username: mozilla-lockbox
+
+theme: minima
+
+header_pages:
+  - process.md
