@@ -1,7 +1,9 @@
 ---
 layout: page
-title: Lockbox Project Process
+title: Project Process
 ---
+
+# Lockbox Project Processes
 
 **Goal:** to capture the current flow of research, product design and development, and test and release management, primarily in context of the Lockbox browser extension. Once agreed on the draft process, it can serve as our model to change and improve. This is not meant to be exhaustive nor required necessarily, everything is subject to change in the spirit of agile and timeline-driven development.
 
