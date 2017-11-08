@@ -25,7 +25,7 @@ The hosted FxA deployments support [endpoint discovery](https://developer.mozill
 
 ### Authentication and Authorization ###
 
-The authorization portion starts by sending an HTTPS `GET` request to the FxA authorization endpoint via a web user agent (e.g., web browser).  The request includes following as query parameters:
+The authorization portion starts by sending an HTTPS `GET` request to the FxA authorization endpoint (`/v1/authorization`) via a web user agent (e.g., web browser).  The request includes following as query parameters:
 
 * `response_type` (**== `authorization_code`**) - The type of authorization response the client expects
 * `access_type` (**== `offline`**) - Set to obtain a refresh token from the initial token exchange
@@ -55,7 +55,7 @@ The client parses and validates the query parameters; it **MUST** validate the `
 
 ### Initial Token Exchange ###
 
-The client completes the sign in process by exchanging an authorization code for access and refresh tokens.  The client sends an HTTPS `POST` request to the token endpoint with the following as "application/json" content:
+The client completes the sign in process by exchanging an authorization code for access and refresh tokens.  The client sends an HTTPS `POST` request to the token endpoint (`/v1/token`) with the following as "application/json" content:
 
 * `grant_type` (**== `authorization_code`**) - The type of grant for the access token
 * `client_id` -- The client's provisioned identifier
@@ -75,7 +75,7 @@ The FxA token endpoint validates the request parameters, and (upon success) retu
 
 ### Refresh Token Exchange ###
 
-If the client's access token is expired and it has a refresh token, it can request an updated access token from the FxA token endpoint. The client sends an HTTPS `POST` request to the token endpoint with the following as "application/json" content:
+If the client's access token is expired and it has a refresh token, it can request an updated access token from the FxA token endpoint. The client sends an HTTPS `POST` request to the token endpoint (`/v1/token`) with the following as "application/json" content:
 
 * `grant_type` (**== `refresh_token`**) - To refresh an access token using a refresh token
 * `client_id` - The client's provisioned identifier
@@ -162,7 +162,7 @@ FxA access tokens are valid for 1209600 seconds (two weeks) by default, and can 
 
 Information about the signed in user can be obtained from the FxA userinfo endpoint.
 
-The client sends an HTTPS `GET` request to the endpoint, including the HTTP `Authorization` header set to `Bearer ` and the access token.
+The client sends an HTTPS `GET` request to the userinfo endpoint (`/v1/profile`), including the HTTP `Authorization` header set to `Bearer ` and the access token.
 
 The userinfo endpoint validates the access token, and (upon success) provides at least the following information as "application/json":
 
@@ -204,7 +204,7 @@ When binding to an FxA account, the user clicks the "sign in" action (either fro
 8. The extension records the user identifier, access token, expiration time, and id token in `browser.storage.local` (the refresh token and application scoped key are only retained in memory)
 9. The local datastore is migrated from the default key to the new application scoped key
 
-### Authenticating ###
+### Signing In ###
 
 If the user attempts to access Lockbox while in the `unauthenticated` state (e.g., clicks the toolbar icon), the extension triggers the following:
 
@@ -215,7 +215,7 @@ If the user attempts to access Lockbox while in the `unauthenticated` state (e.g
 3. Once the user submits their FxA credentials, FxA verifies the credentials and returns the authorization redirect URI containing the response's query parameters.
 4. The extension processes the authorization response and requests the initial token exchange
 5. FxA verifies the extension's request and (upon success) returns the token information
-6. As the extension already has the user's information, it updates its record with the new access token, expiration time, and id token (the updated refresh token and application scoped keys are noly retained in memory)
+6. As the extension already has the user's information, it updates its record with the new access token, expiration time, and id token (the updated refresh token and application scoped keys are only retained in memory)
 7. The local datastore is unlocked using the newly-obtained application scoped key
 8. The extension moves the account state to `authenticated`
    - The toolbar icon is updated to indicate the user is signed in
@@ -234,10 +234,13 @@ When the user signs out (e.g., clicking the "sign out" action in the full editor
 * Closes the full editor view (if opened)
 * Closes the condensed doorhanger view (if opened)
 
-## Mobile Application
+## iOS Mobile Application
 
 _Tee bee Dee_
 
+## Android Mobile Application
+
+_Tee bee Dee_
 
 <!-- References -->
 
