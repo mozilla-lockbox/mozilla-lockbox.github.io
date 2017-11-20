@@ -9,13 +9,13 @@ title: Project Process
 
 <!-- TOC depthFrom:3 depthTo:3 withLinks:1 updateOnSave:1 orderedList:0 -->
 
-- [Research, Product & UX Stories](#research-product-ux-stories)
-- [Sprint & Development Planning (2 weeks)](#sprint-development-planning-2-weeks)
-- [Development, Testing & Release Process](#development-testing-release-process)
+- [Research, Product and UX Stories](#research-product-and-ux-stories)
+- [Sprint and Development Planning (2 weeks)](#sprint-and-development-planning-2-weeks)
+- [Development, Testing and Release Process](#development-testing-and-release-process)
 
 <!-- /TOC -->
 
-### Research, Product & UX Stories
+### Research, Product and UX Stories
 
 **Overview:** Our intention is to lead the the Lockbox development process with research and user-oriented questions: what do we want or need to learn to achieve our product, business and user goals? These questions or goals or features or experiments ultimately result in a GitHub issue filed in the appropriate repository (lockbox-extension for the Firefox extension, lockbox-ios for the iOS app).
 
@@ -46,7 +46,7 @@ _Note: first search for existing / related issues, so as to not create duplicate
 ![issue-creation-approach](https://user-images.githubusercontent.com/49511/32564064-3dbdfc62-c470-11e7-8648-ad088c1fa511.png)
 
 
-### Sprint & Development Planning (2 weeks)
+### Sprint and Development Planning (2 weeks)
 
 **Overview:** Once a feature is confirmed ready to build (see process above), it needs to be prioritized, potentially discussed, and then estimated and scheduled for implementation. Some issues will be created outside of the above process and jump straight into this flow. This is how we, as a core team, agree what our two-week plan is.
 
@@ -179,7 +179,7 @@ Once we're clear on what's done and what's remaining from the sprint…
 - p2
 - p3
 
-### Development, Testing & Release Process
+### Development, Testing and Release Process
 
 * "Take" an issue by assigning it to yourself if not obvious and consider moving it to "In Progress"
 
