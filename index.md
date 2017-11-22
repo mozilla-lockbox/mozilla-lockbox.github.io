@@ -25,7 +25,7 @@ Component                           | Documentation                       | Stat
 ---                                 | ---                                 | ---
 [Data Store][datastore-repo]        | [data-store][datastore-docs]        | [![Build Status][datastore-travis-image]][datastore-travis-link] | [![Coverage Status][datastore-codecov-image]][datastore-codecov-link]
 [Firefox extension][extension-repo] | [lockbox-extension][extension-docs] | [![Build Status][extension-travis-image]][extension-travis-link] |  [![Coverage Status][extension-codecov-image]][extension-codecov-link]
-[iOS application][ios-repo]         |                                     | [![Build Status][ios-travis-image]][ios-travis-link] | [![Coverage Status][ios-codecov-image]][ios-codecov-link]
+[iOS application][ios-repo]         | [lockbox-ios][ios-docs]             | [![BuddyBuild][buddybuild-image]][buddybuild-link] | [![Coverage Status][ios-codecov-image]][ios-codecov-link]
 [Project documentation][docs-repo]  | [mozilla-lockbox][website]
 
 ---
@@ -46,8 +46,9 @@ Component                           | Documentation                       | Stat
 [extension-codecov-link]: https://codecov.io/gh/mozilla-lockbox/lockbox-extension
 
 [ios-repo]: https://github.com/mozilla-lockbox/lockbox-ios
-[ios-travis-image]: https://travis-ci.org/mozilla-lockbox/lockbox-ios.svg?branch=master
-[ios-travis-link]: https://travis-ci.org/mozilla-lockbox/lockbox-ios
+[ios-docs]: https://mozilla-lockbox.github.io/lockbox-ios/
+[buddybuild-image]: https://dashboard.buddybuild.com/api/statusImage?appID=5a0ddb736e19370001034f85&branch=master&build=latest
+[buddybuild-link]: https://dashboard.buddybuild.com/apps/5a0ddb736e19370001034f85/build/latest?branch=master
 [ios-codecov-image]: https://img.shields.io/codecov/c/github/mozilla-lockbox/lockbox-ios.svg
 [ios-codecov-link]: https://codecov.io/gh/mozilla-lockbox/lockbox-ios
 
