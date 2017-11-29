@@ -8,3 +8,5 @@ theme: minima
 header_pages:
   - process.md
   - architecture/index.md
+
+include: [".well-known"]
