@@ -9,3 +9,23 @@ table th {
 table td {
   padding: 4px 24px 4px 0;
 }
+
+a.button-link {
+  display: block;
+  margin: .5em auto;
+  padding: 0.5em;
+  width: 12em;
+  color: white;
+  background-color: #717171;
+  border: 1px solid #717171;
+  border-radius: 4px;
+  text-align: center;
+}
+
+div.callout-box {
+  float: right;
+  width: 30%;
+  margin-left: 1em;
+  padding: 1em;
+  background-color: #f9f9fa;
+}

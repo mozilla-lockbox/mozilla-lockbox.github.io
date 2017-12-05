@@ -3,6 +3,14 @@ layout: page
 title: Lockbox
 ---
 
+<div class="callout-box">
+  <h4>Lockbox for Desktop</h4>
+  <p>A simple stand-alone password manager you can secure with your
+     Firefox Account.</p>
+  <a href="https://testpilot.firefox.com/files/lockbox@mozilla.com/latest"
+     class="button-link">Install Lockbox</a>
+</div>
+
 This website is to gather documentation and details for Mozilla's experimental
 [Lockbox product][website]. Lockbox will be the framework for us to test and
 quickly iterate on hypotheses (on desktop and mobile) without disrupting
