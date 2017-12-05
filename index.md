@@ -7,8 +7,8 @@ title: Lockbox
   <h4>Lockbox for Desktop</h4>
   <p>A simple stand-alone password manager you can secure with your
      Firefox Account.</p>
-  <a href="https://testpilot.firefox.com/files/lockbox@mozilla.com/latest"
-     class="button-link">Install Lockbox</a>
+  <a href="https://mozilla-lockbox.github.io/lockbox-extension/"
+     class="button-link">Get Lockbox</a>
 </div>
 
 This website is to gather documentation and details for Mozilla's experimental
