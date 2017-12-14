@@ -5,6 +5,9 @@ github_username: mozilla-lockbox
 
 theme: minima
 
+plugins:
+  - jekyll-seo-tag
+
 header_pages:
   - process.md
   - architecture/index.md
