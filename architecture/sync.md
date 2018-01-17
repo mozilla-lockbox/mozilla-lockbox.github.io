@@ -40,18 +40,21 @@ Changes are first placed in the `pending` collection before they are applied to 
 * `id` [**string**] (_indexed_) - The target record identifier; this is equal to the affected `id` of the record in `items` or `keystores`.
 * `action` [**string**] - The type of change made; can be one of "add" , "update", or "delete".
 * `record` [**JSON**] - The complete record of the change; for a removed item, the only properties expected are:
-  - `last_modified` (set to the relevant server timestamp, or `0` if not known)
-  - `deleted` (set to `true`)
+
+    - `last_modified` (set to the relevant server timestamp, or `0` if not known)
+    - `deleted` (set to `true`)
 
 ## Staging and Tracking Changes
 
-When an item or keystore is changed locally, a record is inserted/updated in the `pending` collection rather than directly impacting the `items` or `keystores` directly.  When remote changes are fetched, a record for each is inserted/updated in the `pending` collection.
+When an item or keystore is changed locally, a record is inserted/updated into the `pending` collection rather than directly applying to the `items` or `keystores`.  When remote changes are fetched, a record for each is inserted/updated into the `pending` collection.
 
-In both scenarios, the `pending` collection is first queried for an existing record (by source, collection, and id).  If there is an existing record, it is updated with the latest; otherwise a new record is inserted.
+In both scenarios, the `pending` collection is queried for an existing record (by source, collection, and id) before a record is inserted.  If there is an existing record, it is updated with the latest; otherwise a new record is inserted.
+
+When listing or retrieving items, the `pending` collection (for source "local") is queried first, then the stable `items` collection is queried.
 
 # Remote Storage
 
-The remote storage is manaaged via a [Kinto](https://kinto.readthedocs.io/) server instance.  Authentication and authorization to this remote storage service is performed using [Firefox Accounts](./fxa.md) and [OAUTH](https://oauth.net/) bearer tokens, with at least the following scopes:
+The remote storage is managed via a [Kinto](https://kinto.readthedocs.io/) server instance.  Authentication and authorization to this remote storage service is performed using [Firefox Accounts](./fxa.md) and [OAUTH](https://oauth.net/) bearer tokens, with at least the following scopes:
 
 * `profile` - Access to the user's identifier (uid).
 * `https://identity.firefox.com/apps/lockbox` - The Lockbox application feature.
@@ -66,11 +69,23 @@ Lockbox uses the following collections in the (per-user) `default` bucket:
 The following steps are performed during a sync:
 
 1. Fetch remote changes
-3. Reconcile conflicts
-4. Apply remote changes to stable
-5. Apply local changes to remote and stable
+2. Examine pending changes (and apply non-conflicting remote changes to stable)
+3. Reconcile any conflicts (and treat as local changes)
 
-A sync operation runs these steps for each collection ("items" and "keystores").
+    - **NOTE**: this step is skipped if the datastore is locked
+
+5. Apply local changes to remote
+
+    - **NOTE**: this step is skipped for any unresolved conflicts.
+    - **NOTE**: this step is skipped if a network connection to the remote storage service is not available.
+
+6. Apply local changes to (on-device) stable collections
+
+    - **NOTE**: this step is skipped for any changes not applied to the remote storage service.
+
+Generally each step is executed for both collections before moving onto the next step; first for `items` then for `keystores`.
+
+Each of the above steps opens and commits an IndexedDB transaction; this helps mitigate 
 
 ## Markers
 
@@ -91,35 +106,43 @@ Each sync operation begins with examining the collection markers and ends with a
 The first step of a sync operation is to fetch the remote changes.  Within a remote fetch:
 
 1. A read/write IndexedDB transaction is opened against the `markers` and `pending` collections.
-2. the marker for the collection is retrieved, if available
-3. A GET HTTP request is made for the collection; if a marker is available it is passed via the `_since` query parameter, otherwise no `_since` parameter is specified.
-3. Each record in the HTTP response is examined and applied to the `pending` collection:
+2. For each collection;
 
-  - If a record for the "remote" source with the given collection and id already exists, it is updated to match the retrieved record;
-  - Otherwise, a new record is inserted.
+  1. The marker for the collection is retrieved if available.
+  2. An HTTP "GET" request is made for the collection; the query parameter `_since` is set to the marker value if available, or omitted otherwise.
+  3. Each record in the HTTP response is examined and applied to the `pending` collection:
 
-4. The `markers` record for this collection is updated with the ETag HTTP response header value.
+      - If a record for the "remote" source with the given collection and id already exists, it is updated to match the retrieved record;
+      - Otherwise, a new record is inserted.
+
+4. The `markers` records for all collections are updated with the ETag HTTP response header value.
 5. The IndexedDB transaction is committed.
+
+## Examining and Applying Pending Changes from Remote
+
+The next step after fetching remote changes is to examine the pending changes for conflicting changes, and applying any pending "remote" changes that have no conflicts.
+
+This step is performed as follows:
+
+1. A read/write IndexedDB transaction is opened against the `pending` and targeted collections (`items` and `keystores`).
+2. For each collection (first `items`, then `keystores`):
+
+    1. The `pending` collection is queried for all records for the given collection and separated into separate maps (id => record) based on `source` ("local" versus "remote").
+
+    2. Each element in the "remote" map is examined and one of the following actions taken:
+
+        * _There is no corresponding element in the "local" map_: insert/update/remove the matching record in the target collection, delete the record from the `pending` collection, and remove it from the "remote" map.
+        * _This "remote" records is an "update" and there is a corresponding "local" record to "remove"_: update the matching record in the target collection, delete the "remote" and "local" records from the `pending` collection, and remove it from both maps.
+        * _This "remote" record is a "remove" and there is a corresponding "local" record to "update"_: delete the "remote" record from the `pending` collection, and remove it from the "remote" map.
+        * _This "remote" record is an "update" and there is a corresponding "local" record to "update"_: reserve to later reconcile the conflicts as appropriate ([`items`](#item-conflicts) or [`keystores`](#keystore-conflicts)).
+
+3. The IndexedDB transaction is committed.
 
 ## Reconciling Conflicts
 
 Conflicts can occur when a change is made both in the local state and remote state.  For instance, the user made changes to an item's title on their mobile device while there was no network access (e.g., airplane mode), and also made changes to the same item's tags ore origins on their desktop; or the user added an item independently on both devices, resulting in a conflict of the keystores.
 
-In most conflict cases, the datastore needs to be unlocked before the conflicts can be reconciled; such changes will be held until the datastore is unlocked, and all other changes will be applied is possible.
-
-The overall process here is:
-
-1. A read/write IndexedDB transaction is opened against the `pending` and targeted collection (`items` or `keystores`).
-2. The `pending` collection is queried for all records for the given collection and separated into distinct maps (id => record) based on source ("local" versus "remote").
-3. Each element in the "remote" map is examined:
-
-  - If there is no corresponding element in the "local" map; insert/update/remove the matching record in the target collection, delete the record from the `pending` collection, and remove it from the map.
-  - If the corresponding "local" record is a "remove" while this "remote" record is an "update"; update the matching record in the target collection, delete the "remote" and "local" records from the `pending` collection, and remove it from both maps.
-  - The the corresponding "local" record is an "update" while this "remote" record is a "remove"; delete the "remote" record from the `pending` collection, and remove it from the "remote" map.
-  - If the corresponding "local" record **and** the "remote" record are both "update"; reserve it for conflict reconciliation.
-
-4. Each element in the "local" map is examined:
-5. The IndexedDB transaction is committed.
+**Note** that the datastore needs to be unlocked before conflicts can be reconciled; such changes will be held until the datastore is unlocked, and all other changes will be applied if possible.
 
 ### Keystore Conflicts
 
@@ -127,53 +150,71 @@ Resolving keystore conflicts is relatively simple: just take the union of all ke
 
 ### Item Conflicts
 
-Reconciling conflicting changes within an item can be complex.  To start with, the following basic rules will apply:
+Reconciling conflicting item changes start with the following basic rules:
 
 * _Favor "update" actions over "remove" actions_. If an item is both removed and updated, treat it as updated.
 * _Favor local changes over remote changes_. For a given change within an item, favor the local change over the remote change.
 
-If the local action is "remove" and the remote action is "update", reconcile to the remote item.  If the local action is "update" and the remote action is "remove", reconcile to the local item.  Otherwise, reconcile remote/local "update" conflicts for an item as follows:
+Item conflicts are reconciled as follows:
 
-* Start with the "local" item and clone it to create a workspace item ("working").
-* Compare the `title` and `disabled` properties:
+1. A read/write IndexedDB transaction is opened against the `pending` `items` collections.
+2. The `pending` collection is queried for records targeting "items", and grouped by id.
+3. For each unique id:
 
-  - if "local" does not match "stable", keep "local"
-  - if "local" does match "stable", apply "remote"
+    1. A working item is constructed as follows:
 
-* Compare the properties within `entry`; for each property:
+        1. Start with the "local" item and clone it to create a workspace item ("working").
+        2. Compare the `title` and `disabled` properties:
 
-  - If "local" does not match "stable", keep "local"
-  - If "local" does match "stable", apply "remote"
+            - if "local" does not match "stable", keep "local"
+            - if "local" does match "stable", apply "remote"
 
-* Perform a three-way merge (local, stable, remote) of the `origins` property.
-* Perform a three-way merge (local, stable, remote) of the `tags` property.
-* Difference and merge history entries, with local history entries ahead of remote history entries.
-* Prepend a history entry, using "working.entry" as the source state and "remote.entry" as the target state.
-* Set the `modified` property to the current date/time.
+        3. Compare the properties within `entry`; for each property:
 
-Once the item is reconciled, prepare a working record for the item:
+            - If "local" does not match "stable", keep "local"
+            - If "local" does match "stable", apply "remote"
 
-* Recalculate and apply the search hashes for `origins` and `tags` values, respectively.
-* Encrypt the item and replace the existing record's `encrypted` value.
-* Update the `active` property to appropriately reflect the contained item's `disabled` state. 
-* Apply the `last_modified` value from the matching "remote" record in `pending`.
-* Change the matching "local" record in `pending` to this record.
+        4. Perform a three-way merge (local, stable, remote) of the `origins` property.
+        5. Perform a three-way merge (local, stable, remote) of the `tags` property.
+        6. Difference and merge history entries, with local history entries more recent than remote history entries.
+        7. Prepend a history entry, using "working.entry" as the source state and "remote.entry" as the target state.
+        8. Set the `modified` property to the current date/time.
+
+    4. The working item is applied to the "local" record in `pending` as follows:
+
+        1. The search hashes for `origins` and `tags` are recalculated and applied to the record.
+        2. The `active` property is changed to properly reflect the working item's `disabled` state.
+        3. The working item is encrypted using its item key; this ciphertext replaces the record's `encrypted` value.
+        `disabled` state. 
+        4. The `last_modified` value from the matching "remote" record in `pending` is applied to this record.
+
+    5. The "remote" record in `pending` is deleted from the collection.
+
+4. The transaction is committed.
 
 ## Applying Pending Changes
 
-The next step after reconciling any conflicts is to apply the pending changes to the stable collections.  First any remote-sourced pending changes are applied to the device's stable collections, then local-sourced changes are applied to the remote storage, then finally those local-sourced pending are applied to the device's stable collections.
+The next step after reconciling any conflicts is to apply the remaining pending changes.  At this step, all pending changes should originate from "local", and are applied as follows:
 
-Remote-sourced changes are applied to the device's stable collections and cleared from the `pending` collection.
+1. A read/write transaction IndexedDB transaction is opened against the `pending` and stable collections (`items` and `keystores`).
+
+2. For each targeted collection (first `items` then `keystores`):
+
+    1. The `pending` collection is queried for all records for the targeted collection; any `pending` record with unresolved conflicts is skipped.
+    2. A kinto [batch operation](http://kinto.readthedocs.io/en/stable/api/1.x/batch.html) is constructed; the `body` of each element in `requests` is the `pending` record's `record` property, and a  
+2. A remote batch operation is constructed
+
+1.   First any remote-sourced pending changes are applied to the device's stable collections, then local-sourced changes are applied to the remote storage, then finally those local-sourced pending are applied to the device's stable collections.
 
 # Occurrence and Frequency
 
-The following trigger a sync operation in the "desktop" extension:
+The following trigger an automatic sync operation in the "desktop" extension:
 
 * The browser is first started, and is bound to an FxA account;
 * A change is made locally; or
 * More than 30 seconds have elapsed since the last sync.
 
-On mobile, the following trigger a sync operation:
+On mobile, the following trigger an automatic sync operation:
 
 * The application is first started, and is bound to an FxA account;
 * A request to fill (via share sheet or Android's auto-fill API); or
@@ -181,9 +222,11 @@ On mobile, the following trigger a sync operation:
 
 The difference in time-based durations between desktop and mobile are an attempt to balance mobile power management (which is much more aggressive than typical personal computer operating systems) against convenient access to the user's data.
 
+Additionally, a user can trigger a sync operation manually.
+
 # Errors
 
-The following errors can occur:
+The following error reasons can occur:
 
 * `OFFLINE` - There is no network connectivity to the remote storage services; connectivity needs to be restored before sync can continue.
 * `NETWORK` - A network error -- other than lack of connectivity -- was detected.
