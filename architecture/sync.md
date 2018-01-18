@@ -24,7 +24,7 @@ All pending changes to items and keystores are tracked in IndexedDB; if the data
 
 Changes are first placed in the `pending` collection before they are applied to the stable collections (`items` and `keystores`).  The structure of a `pending` record is:
 
-```json
+```
 {
   "key": integer auto,
   "collection": "items" | "keystores",
@@ -95,7 +95,7 @@ Each of the above steps opens and commits an IndexedDB transaction; this helps m
 
 Each sync operation begins with examining the collection markers and ends with advancing those markers.  Each collection marker is the `ETag` HTTP response header value from the previous operation; if there is no previous sync operation, the value is treated as `0`.  The marker is stored on the device in IndexedDB via the `markers` collection:
 
-```json
+```
 {
   "collection": "keystores" | "items",
   "etag": string
@@ -129,15 +129,27 @@ Expired, invalidated, or missing access token can be refreshed as follows:
 
 Once authorization is verified, the next step of a sync operation is to fetch the remote changes.  Within a remote fetch:
 
-1. A read/write IndexedDB transaction is opened against the `markers` and `pending` collections.
-2. For each collection;
+1. A read/write IndexedDB transaction is opened against the collections `markers`, `pending`, and targeted stable (`items` then `keystores`).
+2. For each targeted collection:
 
-  1. The marker for the collection is retrieved if available.
-  2. An HTTP "GET" request is made for the collection; the query parameter `_since` is set to the marker value if available, or omitted otherwise.
-  3. Each record in the HTTP response is examined and applied to the `pending` collection:
+    1. The marker for the collection is retrieved if available.
+    2. An HTTP "GET" request is made for the collection; the query parameter `_since` is set to the marker value if available, or omitted otherwise.
+    3. Each record in the HTTP response is examined and applied to the `pending` collection:
 
-      - If a record for the "remote" source with the given collection and id already exists, it is updated to match the retrieved record;
-      - Otherwise, a new record is inserted.
+        1. The `pending` collection is queried for an existing record, matched by `id` with the "remote" source:
+
+            - If there is an existing `pending` record, it will be updated to match the latest remote changes.
+            - If there is no existing `pending` record, a new `pending` record will be created and inserted.
+
+        2. Determine the `action` for this remote change; the targeted stable collection is queried for an existing record matched by `id`:
+
+            - If the remote record is marked as "deleted" and there is an existing stable record, treat the remote change as "remove".
+            - If the remote record is marked as "deleted" and there eis no existing stable record, discard the incoming remote change (and delete any existing `pending` "remote" record).
+            - If there is an existing record, and its `encrypted` value exactly matches the incoming remote record, disregard the incoming remote change (and delete any existing `pending` remote record); the `last_modified` value of the stable collection's record is updated to match the remote record before the remote record is discarded.
+            - If there is an existing record but its `encrypted` value does not exactly match the incoming remote record, treat the remote change as an "update".
+            - If there is no existing record iin the targeted collection, treat the remote change as an "add".
+
+        3. The "remote" change record is inserted/updated into the `pending` collection.
 
 4. The `markers` records for all collections are updated with the ETag HTTP response header value.
 5. The IndexedDB transaction is committed.
@@ -282,3 +294,9 @@ The following error reasons can occur:
 * `NETWORK` - A network error -- other than lack of connectivity -- was detected.
 * `SYNC_LOCKED` - There is a conflict detected between the local and remote changes; the datastore needs to be unlock in order to reconcile.
 * `SYNC_AUTH` - The remote service access tokens have expired or are missing; the user needs to authenticate before sync and continue.
+
+# API Changes
+
+## `lockbox-datastore`
+
+# Schema Changes
