@@ -299,4 +299,31 @@ The following error reasons can occur:
 
 ## `lockbox-datastore`
 
+The bulk of the sync logic resides in this module; it already manages on-device storage and almost all of the encryption.
+
+### Method `async DataStore.sync(opts)`
+
+The `sync()` method performs the [sync operation](#process). This method takes a single Object argument, `opts`, with the following properties:
+
+* `token` {_string_} the OAuth access token to use for authorization.
+
+This async method returns the `DataStore` instance on success, or throws a `DataStoreError` upon failure.
+
 # Schema Changes
+
+## `keystore`
+
+The `keystore` IndexedDB object representation has the following additions:
+
+* `id` [**string**] (_indexed_) the (remote storage) identifier for this keystore; this is calculated by taking a SHA-256 hash of `group`, encoded as a hex string.
+* `last_modified` [**number**] the last modified timestamp from its remote storage equivalent; can be `undefined` for a keystore not yet synced.
+
+The following indexes are removed:
+
+* `uuid` - this was envisioned to be the server-provided identifier; however having the identifier consistently available on the device prior to sync is more advantageous.
+
+**NOTE**: for `lockbox-datastore` version 0.2.0 and earlier, the removed indexes above do not contain (valid) information, so no effort to migrate it is made.
+
+## `item`
+
+* `last_modified` [**number**] the last modified timestamp from its remote storage equivalent; can by `undefined` for an item not yet synced.
