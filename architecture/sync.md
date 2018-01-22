@@ -410,9 +410,20 @@ The following error reasons can occur:
 * `SYNC_LOCKED` - There is a conflict detected between the local and remote changes; the datastore needs to be unlock in order to reconcile.
 * `SYNC_AUTH` - The remote service access tokens have expired or are missing; the user needs to authenticate before sync and continue.
 
+## Telemetry
+
+The following telemetry event is used to record sync interactions.
+
+- Single "sync" event, on completion of the [process](#sync-process), with the following extra properties:
+
+    - `fxa_uid` [**string**] - The FxA user identifier.
+    - `error` [**string*] - The [failure reason](#errors), or `null` if sync was successful.
+
 ## API Changes
 
-## `lockbox-datastore`
+The general implementation approach is for `-datastore` to perform the sync operation when the application (e.g., `lockbox-extension` or `lockbox-ios`) directs it to.
+
+## `lockbox-datastore` Module
 
 The bulk of the sync logic resides in this module; it already manages on-device storage and almost all of the encryption.
 
@@ -424,9 +435,34 @@ The `sync()` method performs the [sync operation](#process). This method takes a
 
 This async method returns the `DataStore` instance on success, or throws a `DataStoreError` upon failure.
 
+## `lockbox-extension` Application
+
+### Method `async Account.token()`
+
+The `token()` method retrieves the current [OAuth] access token, refreshing it if necessary.
+
+This method takes no arguments.  This async method returns the access token (as a string) upon success, or throws an error on failure.
+
+### Method `async Account.signOut(full)`
+
+The `signOut()` method performs both a "light" signing out and an account "forget" or "reset" that clears all cached remote data.
+
+This method takes the following arguments:
+
+* `full` [**boolean** = `false`] - If `true`, all account information cached on the device is removed from its cache.
+
+This method returns the `Account` instance on success, or throws an error upon failure.
+
+The light sign out clears the following values from memory (and secure storage) and changes the mode to `UNAUTHENTICATED`:
+
+* `refresh_token`
+* `keys`
+
+The complete sign out clears all FxA-related data (both in-memory and from on-disk caches), and changes the mode to `GUEST`.
+
 ## Schema Changes
 
-## `keystore`
+### `keystore` Changes
 
 The `keystore` IndexedDB object representation has the following additions:
 
@@ -439,7 +475,7 @@ The following indexes are removed:
 
 **NOTE**: for `lockbox-datastore` version 0.2.0 and earlier, the removed indexes above do not contain (valid) information, so no effort to migrate it is made.
 
-## `item`
+### `item` Changes
 
 * `last_modified` [**number**] the last modified timestamp from its remote storage equivalent; can by `undefined` for an item not yet synced.
 
