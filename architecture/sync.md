@@ -5,7 +5,7 @@ title: Cloud-based Sync and Backup
 
 # Cloud-based Sync and Backup
 
-Cloud-based synchronization can provide a user reliable access to their logins.  Building off the encrypt-always nature of [data storage](./data-storage.md) extends the secure protection of the user's data across their devices in a consistent manner.
+Cloud-based synchronization can provide a user reliable access to their logins.  Building off the encrypt-always nature of [data storage] extends the secure protection of the user's data across their devices in a consistent manner.
 
 ## Core Technologies
 
@@ -180,7 +180,7 @@ The following steps are performed during a sync:
 
 Generally each step is executed for both collections before moving onto the next step; first for `items` then for `keystores`.
 
-Each of the above steps opens and commits an IndexedDB transaction; this helps mitigate 
+Each of the above steps opens and commits an IndexedDB transaction.  This helps to mitigate data loss; including if sync is interrupted for some reason, or if a conflicting remote change occurs from another device while sync is in progress.
 
 ### Verifying Remote Authorization
 
@@ -261,6 +261,13 @@ Conflicts can occur when a change is made both in the local state and remote sta
 
 **Note** that the datastore needs to be unlocked before conflicts can be reconciled; such changes will be held until the datastore is unlocked, and all other changes will be applied if possible.
 
+The conflict reconciliation is performed as follows:
+
+1. A read/write IndexedDB transaction is opened against the `pending` and stable collections (`items` then `keystores`).
+2. All conflicting items are reconciled (potentially adding new keystore changes to be reconciled).
+3. All conflicting keystores are reconciled.
+4. The IndexedDB transaction is committed.
+
 #### Keystore Conflicts
 
 Resolving keystore conflicts is relatively simple; the final keystore is a union of all keys present in the (local and remote) pending and stable versions.
@@ -269,9 +276,8 @@ Note that any potential item conflicts also result in a union of all keys presen
 
 The steps to resolve keystore conflicts are as follows:
 
-1. Ensure a read/write IndexedDB transaction is open against the `pending` and `items` collections.
-2. The `pending` collection is queried for records targeting "keystores", and grouped by id.
-3. For each unique id:
+1. The `pending` collection is queried for records targeting "keystores", and grouped by id.
+2. For each unique id:
 
     1. A working keystore is constructed as follows:
 
@@ -288,8 +294,6 @@ The steps to resolve keystore conflicts are as follows:
     
     3. If there is a "remote" record, it is deleted from the `pending` collection.
 
-4. Ensure the IndexedDB transaction is committed.
-
 #### Item Conflicts
 
 Reconciling conflicting item changes start with the following basic rules:
@@ -299,14 +303,16 @@ Reconciling conflicting item changes start with the following basic rules:
 
 Item conflicts are reconciled as follows:
 
-1. Ensure a read/write IndexedDB transaction is open against the `pending` and `items` collections.
 2. The `pending` collection is queried for records targeting "items", and grouped by id.
 3. For each unique id:
 
     1. A working item is constructed as follows:
 
-        1. Start with the "local" item and clone it to create a "working" item.
-        2. Compare the `title` and `disabled` properties:
+        1. Start with the "local" item and clone it to create a "working" item, keeping the following properties unchanged:
+
+            - `created`
+
+        2. Compare the `title`, `disabled`, and `last_accessed` properties:
 
             - if "local" does not match "stable", keep "local"
             - if "local" does match "stable", apply "remote"
@@ -318,9 +324,10 @@ Item conflicts are reconciled as follows:
 
         4. Perform a [merge](#merging-origins) (local, stable, remote) of the `origins` property.
         5. Perform a [merge](#merging-tags) (local, stable, remote) of the `tags` property.
-        6. Difference and merge history entries, with local history entries more recent than remote history entries.
-        7. Prepend a history entry, using "working.entry" as the source state and "remote.entry" as the target state.
-        8. Set the `modified` property to the current date/time.
+        6. Perform a [merge](#merging-history] (local, stanle, remote) of the `history` array.
+        7. Prepend a history entry, using `working.entry` as the source state and `remote.entry` as the target state.
+        8. Prepend a history entry, using `working.entry` as the source state and `stable.entry` as the target state.
+        9. Set the `modified` property to the current date/time.
 
     4. The working item is applied to the "local" record in `pending` as follows:
 
@@ -331,8 +338,6 @@ Item conflicts are reconciled as follows:
         5. This "local" record is updated in the `pending` collection.
 
     5. The "remote" record in `pending` is deleted from the collection.
-
-4. Ensure the IndexedDB transaction is committed.
 
 ##### Merging `origins`
 
@@ -364,6 +369,13 @@ For **BETA**, tags may not be supported.  However, potential loss here is far le
 4. Add all values to "working" that are present in "local-add" and "remote-add".
 5. Filter "working" to remove any duplicates.
 
+##### Merging `history`
+
+History within an item is tracked as an ordered list of JSON objects, from newest to oldest.  The following steps are followed to merge histories:
+
+1. The difference of remote history against the stable history is calculated, and prepended to the working item's `history`.
+2. the difference of local history against the stable history is calculated, and and prepended to the working item's `history`.
+
 ### Applying Pending Changes
 
 The next step after reconciling any conflicts is to apply the remaining pending changes.  At this step, all pending changes should originate from "local", and are applied as follows:
@@ -378,7 +390,7 @@ The next step after reconciling any conflicts is to apply the remaining pending 
         - The `method` is set based on the record's `action` ("PUT" for "add" or "update"; "DELETE" for "remove").
         - The `path` is set to the full path of the targeted record.
         - The `body` is set to the record's `record` value.
-        - The `headers` is set to include `If-Not-Modified`; set to the `last_modified` property if known, or "*" otherwise.
+        - The `headers` is set to include `If-Match` set to the `last_modified` property if known, or include `If-None-Match` set to "*" otherwise.
     
     3. The response from the remote storage service is processed; for each element in the response's `responses` array:
 
@@ -391,34 +403,58 @@ If any records failed to be applied, the sync process is performed again.
 
 ### Initial vs. Incremental Sync
 
-The lack of `markers` is used to indicate this is an initial sync operation.  In this case, all records in the stable collections (`items` and `keystores`) are treated as if they are "local" "add" changes in the `pending` collection.
+The lack of `markers` is used to indicate if an initial sync operation is necessary.  An initial sync follows the same process as the incremental sync process documented above, but treats all existing stable collection records as pending "local" "add" actions.
+
+The following are performed prior to the rest of the sync process to prepare an initial sync:
+
+1. A read/write IndexedDB transaction is opened against the `pending` and stable collcetions (`items` and `keystores`).
+2. For each record in the stable collections, a record is inserted into the `pending` collection:
+
+    1. The `pending` collections is queried to verify an existing record for this stable record is not present: if a `pending` record is present then its `record` property is updated; otherwise a new `pending` record is prepared:
+
+        1. The `source` property is set to "local".
+        2. The `action` property is set to "add"
+        3. The `collection` and `id` properties are set appropriate to this stable record.
+        4. The `record` property is set to a clone of this stable record.
+
+    2. The new `pending` record is inserted/updated.
+
+3. The IndexedDB transaction is committed.
 
 ## Occurrence and Frequency
 
+Lockbox automatically attempts to sync the user's data between the device and remote storage transparently and unobtrusively.  Additionally, Lockbox provides a action that lets the user to immediately trigger a sync.
+
+### Desktop Triggers
+
 The following trigger an automatic sync operation in the "desktop" extension:
 
-* The browser is first started, and is bound to an FxA account;
+* The user first "upgrades" or links an FxA account to Lockbox;
+* The browser is first started and is bound to an FxA account;
 * A change is made locally; or
 * More than 30 seconds have elapsed since the last sync.
 
+### Mobile Triggers
+
 On mobile, the following trigger an automatic sync operation:
 
-* The application is first started, and is bound to an FxA account;
+* The user completes initial onboarding of the application, including signing in/signing up for an FxA account;
+* The application is first started (presumed to be bound to an FxA account);
 * A request to fill (via share sheet or Android's auto-fill API); or
 * The application is in the foreground and more than 120 seconds have elapsed since the last sync.
 
 The difference in time-based durations between desktop and mobile are an attempt to balance mobile power management (which is much more aggressive than typical personal computer operating systems) against convenient access to the user's data.
 
-Additionally, a user can trigger a sync operation manually.
+## Sync Errors
 
-## Errors
-
-The following error reasons can occur:
+The sync process has various points at which a failure can occur:
 
 * `OFFLINE` - There is no network connectivity to the remote storage services; connectivity needs to be restored before sync can continue.
 * `NETWORK` - A network error -- other than lack of connectivity -- was detected.
+* `AUTH` - The remote service access tokens have expired or are missing; the user needs to authenticate before sync and continue.
 * `SYNC_LOCKED` - There is a conflict detected between the local and remote changes; the datastore needs to be unlock in order to reconcile.
-* `SYNC_AUTH` - The remote service access tokens have expired or are missing; the user needs to authenticate before sync and continue.
+
+In almost all cases, these errors occur outside of direct user interaction.  It is necessary to surface these conditions to the user in a manner that is not overly disruptive yet still noticeable.
 
 ## Telemetry
 
@@ -427,50 +463,11 @@ The following telemetry event is used to record sync interactions.
 - Single "sync" event, on completion of the [process](#sync-process), with the following extra properties:
 
     - `fxa_uid` [**string**] - The FxA user identifier.
-    - `error` [**string*] - The [failure reason](#errors), or `null` if sync was successful.
-
-## API Changes
-
-The general implementation approach is for `-datastore` to perform the sync operation when the application (e.g., `lockbox-extension` or `lockbox-ios`) directs it to.
-
-## `lockbox-datastore` Module
-
-The bulk of the sync logic resides in this module; it already manages on-device storage and almost all of the encryption.
-
-### Method `async DataStore.sync(opts)`
-
-The `sync()` method performs the [sync operation](#process). This method takes a single Object argument, `opts`, with the following properties:
-
-* `token` {_string_} the OAuth access token to use for authorization.
-
-This async method returns the `DataStore` instance on success, or throws a `DataStoreError` upon failure.
-
-## `lockbox-extension` Application
-
-### Method `async Account.token()`
-
-The `token()` method retrieves the current [OAuth] access token, refreshing it if necessary.
-
-This method takes no arguments.  This async method returns the access token (as a string) upon success, or throws an error on failure.
-
-### Method `async Account.signOut(full)`
-
-The `signOut()` method performs both a "light" sign out and a full "forget" or "reset".
-
-This method takes the following arguments:
-
-* `full` [**boolean** = `false`] - If `true`, all account information cached on the device is removed from its cache.
-
-This method returns the `Account` instance on success, or throws an error upon failure.
-
-The "light" sign out clears the following values from memory (and secure storage) and changes the mode to `UNAUTHENTICATED`:
-
-* `refresh_token`
-* `keys`
-
-The "full" sign out clears all account data (both in-memory and from on-disk caches), and changes the mode to `GUEST`.
+    - `error` [**string**] - The [failure reason](#errors), or `null` if sync was successful.
 
 ## Schema Changes
+
+The on-device IndexedDB database originally documented in [data storage]()
 
 ### `keystore` Changes
 
@@ -490,6 +487,7 @@ The following indexes are removed:
 * `last_modified` [**number**] the last modified timestamp from its remote storage equivalent; can by `undefined` for an item not yet synced.
 
 
+[data storage]: ./data-storage.md
 [Dexie]: https://dexie.org/
 [ETag]: https://en.wikipedia.org/wiki/HTTP_ETag
 [FxA]: ./fxa.md
