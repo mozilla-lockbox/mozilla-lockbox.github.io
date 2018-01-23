@@ -1,9 +1,9 @@
 ---
 layout: page
-title: Remote Storage for Backup and Synchronization
+title: Cloud-based Sync and Backup
 ---
 
-# Remote Storage for Backup and Synchronization
+# Cloud-based Sync and Backup
 
 Cloud-based synchronization can provide a user reliable access to their logins.  Building off the encrypt-always nature of [data storage](./data-storage.md) extends the secure protection of the user's data across their devices in a consistent manner.
 
