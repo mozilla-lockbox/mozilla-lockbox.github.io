@@ -64,7 +64,7 @@ Changes are first placed in the `pending` collection before they are applied to 
 
 ## Staging and Tracking Changes
 
-Whenever a change is to be tracked (whether that change comes from remote storage or a local modification), the `pending` collection is queried for an existing record (by source, collection, and id) before a record is inserted.  If there is an existing record, it is updated with the latest; otherwise a new record is inserted.
+Whenever a change is to be tracked (whether that change comes from remote storage or a local modification), the `pending` collection is queried for an existing record (by source, collection, and id) before a record is inserted.  If there is an existing `pending `record, it is updated with the latest; otherwise a new record is inserted.
 
 When an item or keystore is changed locally, a record is inserted/updated into the `pending` collection rather than directly applying to the `items` or `keystores`.  When remote changes are fetched, a record for each is inserted/updated into the `pending` collection.
 
@@ -123,7 +123,9 @@ When a local change is made to an item, the follow is performed:
 
 ## Remote Storage
 
-The remote storage is managed via a [Kinto] server instance.  Authentication and authorization to this remote storage service is performed using [Firefox Accounts][fxa] and [OAUTH] bearer tokens, with at least the following scopes:
+The remote storage is managed via a [Kinto] server instance.  Kinto is essentially a RESTful key/value record store, with records managed with a collection, and a collection managed within a bucket.  Buckets and collections can also have application-specific meta-data associated with them.  It can provide a per-user default bucket (referred to as "default").
+
+Authentication and authorization to Kinto is performed using [Firefox Accounts][fxa] and [OAUTH] bearer tokens, with at least the following scopes:
 
 * `profile` - Access to the user's identifier (uid).
 * `https://identity.firefox.com/apps/lockbox` - The Lockbox application feature.
@@ -132,6 +134,14 @@ Lockbox uses the following collections in the (per-user) `default` bucket:
 
 * `lockbox_items` ("/buckets/default/collections/lockbox_items") - The collection of Lockbox item records.
 * `lockbox_keystores` ("/buckets/default/collections/lockbox_keystores") - The collection of Lockbox item keystores (usually there is only one entry).
+
+### Server Timestamps
+
+All buckets, collections, and records have a server-maintained last modified timestamp.  This value is provided in a record/collection/bucket's representation under the `last_modified` property as an integer, and is returned as an [ETag] response header.
+
+For lists (collections in a bucket, records in a collection), the timestamp is used on "list" GET requests via a `_since` query parameter to limit response data to any changes (including creates, updates, and deletes) after that timestamp.
+
+For individual values (a record, or metadata on a collection or bucket), the timestamp is used via the `If-Match` HTTP request header to prevent updates or deletes if the record has changed since last operated on the server.
 
 ## Sync Process
 
@@ -160,7 +170,7 @@ Generally each step is executed for both collections before moving onto the next
 
 Each of the above steps opens and commits an IndexedDB transaction; this helps mitigate 
 
-### Markers and Initial vs. Increment Sync
+### Markers
 
 Each sync operation begins with examining the collection markers and ends with advancing those markers.  Each collection marker is the [`ETag`][etag] HTTP response header value from the previous operation; if there is no previous sync operation, the value is treated as `0`.  The marker is stored on the device in IndexedDB via the `markers` collection:
 
@@ -174,7 +184,9 @@ Each sync operation begins with examining the collection markers and ends with a
 * `collection` [**string**] (_primary key_) - The name of the collection; this can be one of "items" or "keystores".
 * `etag` [**string**] - The latest remote server timestamp for the associated collection, conveyed as the ETag HTTP response header.
 
-The lack of `markers` is used to indicate this is an initial sync operation.
+### Initial vs. Incremental Sync
+
+The lack of `markers` is used to indicate this is an initial sync operation.  In this case, all records in the stable collections (`items` and `keystores`) are treated as if they are "local" "add" changes in the `pending` collection.
 
 ### Verifying Remote Authorization
 
@@ -214,11 +226,11 @@ Once authorization is verified, the next step of a sync operation is to fetch th
 
         2. Determine the `action` for this remote change; the targeted stable collection is queried for an existing record matched by `id`:
 
-            - If the remote record is marked as "deleted" and there is an existing stable record, treat the remote change as "remove".
+            - If the remote record has a `deleted` property set to `true` and there is an existing stable record, treat the remote change as "remove".
             - If the remote record is marked as "deleted" and there eis no existing stable record, discard the incoming remote change (and delete any existing `pending` "remote" record).
-            - If there is an existing record, and its `encrypted` value exactly matches the incoming remote record, disregard the incoming remote change (and delete any existing `pending` remote record); the `last_modified` value of the stable collection's record is updated to match the remote record before the remote record is discarded.
-            - If there is an existing record but its `encrypted` value does not exactly match the incoming remote record, treat the remote change as an "update".
-            - If there is no existing record iin the targeted collection, treat the remote change as an "add".
+            - If there is an existing stable record, and its `encrypted` value exactly matches the incoming remote record, disregard the incoming remote change (and delete any existing `pending` remote record); the `last_modified` value of the stable collection's record is updated to match the remote record before the remote record is discarded.
+            - If there is an existing stable record but its `encrypted` value does not exactly match the incoming remote record, treat the remote change as an "update".
+            - If there is no existing stable record iin the targeted collection, treat the remote change as an "add".
 
         3. The "remote" change record is inserted/updated into the `pending` collection.
 
@@ -240,6 +252,7 @@ This step is performed as follows:
 
         * _There is no corresponding element in the "local" map_: insert/update/remove the matching record in the target collection, delete the record from the `pending` collection, and remove it from the "remote" map.
         * _This "remote" records is an "update" and there is a corresponding "local" record to "remove"_: update the matching record in the target collection, delete the "remote" and "local" records from the `pending` collection, and remove it from both maps.
+        * _This "remote" record is a "remove" and there is a corresponding "local" record to "remove"_: remove the matching record in the target collection, delete the "remote" and "local" records from the `pending` collcetion, and remove it from both maps.
         * _This "remote" record is a "remove" and there is a corresponding "local" record to "update"_: delete the "remote" record from the `pending` collection, and remove it from the "remote" map.
         * _This "remote" record is an "update" and there is a corresponding "local" record to "update"_: The records are reserved to later reconcile the conflicts as appropriate ([`items`](#item-conflicts) or [`keystores`](#keystore-conflicts)):
 
@@ -445,7 +458,7 @@ This method takes no arguments.  This async method returns the access token (as 
 
 ### Method `async Account.signOut(full)`
 
-The `signOut()` method performs both a "light" signing out and an account "forget" or "reset" that clears all cached remote data.
+The `signOut()` method performs both a "light" sign out and a full "forget" or "reset".
 
 This method takes the following arguments:
 
@@ -453,12 +466,12 @@ This method takes the following arguments:
 
 This method returns the `Account` instance on success, or throws an error upon failure.
 
-The light sign out clears the following values from memory (and secure storage) and changes the mode to `UNAUTHENTICATED`:
+The "light" sign out clears the following values from memory (and secure storage) and changes the mode to `UNAUTHENTICATED`:
 
 * `refresh_token`
 * `keys`
 
-The complete sign out clears all FxA-related data (both in-memory and from on-disk caches), and changes the mode to `GUEST`.
+The "full" sign out clears all account data (both in-memory and from on-disk caches), and changes the mode to `GUEST`.
 
 ## Schema Changes
 
