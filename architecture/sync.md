@@ -29,7 +29,29 @@ The following terms are also used:
 * `keystore` - The representation of Lockbox's item keystore, realized as a JSON objet.
 * `record` - The persisted representation of an item or keystore; this contains additional unencrypted metadata alongside the encrypted item, realized as a JSON object.
 
-## On-Device Caches
+## Remote Storage
+
+The remote storage is managed via a [Kinto] server instance.  Kinto is essentially a RESTful key/value record store, with records managed with a collection, and a collection managed within a bucket.  Buckets and collections can also have application-specific meta-data associated with them.  It can provide a per-user default bucket (referred to as "default").
+
+Authentication and authorization to Kinto is performed using [Firefox Accounts][fxa] and [OAUTH] bearer tokens, with at least the following scopes:
+
+* `profile` - Access to the user's profile information, especially their user identifier (uid).
+* `https://identity.firefox.com/apps/lockbox` - The Lockbox application feature.
+
+Lockbox uses the following collections in the (per-user) `default` bucket:
+
+* `lockbox_items` ("/buckets/default/collections/lockbox_items") - The collection of Lockbox item records.
+* `lockbox_keystores` ("/buckets/default/collections/lockbox_keystores") - The collection of Lockbox item keystores (usually there is only one entry).
+
+### Server Timestamps
+
+All buckets, collections, and records have a server-maintained last modified timestamp.  This value is provided in a record/collection/bucket's representation under the `last_modified` property as an integer, and is returned as an [ETag] response header.
+
+For lists (collections in a bucket, records in a collection), the timestamp is used on "list" GET requests via a `_since` query parameter to limit response data to any changes (including creates, updates, and deletes) after that timestamp.
+
+For individual values (a record, or metadata on a collection or bucket), the timestamp is used via the `If-Match` HTTP request header to prevent updates or deletes if the record has changed since last operated on the server.
+
+## Tracking and Staging
 
 All pending changes to items and keystores are tracked in IndexedDB; if the datastore is locked and there are conflicts that need to be reconciled, it may not be possible to process the changes until the datastore is unlocked.
 
@@ -52,21 +74,33 @@ Changes are first placed in the `pending` collection before they are applied to 
 * `collection` [**string**] (_indexed_) - The target collection; can one of "items" or "keystores".
 * `id` [**string**] (_indexed_) - The target record identifier; this is equal to the record's `id` from the targeted collection (`items` or `keystores`).
 * `action` [**string**] - The type of change made; can be one of "add" , "update", or "remove".
-* `record` [**JSON**] - The complete record of the change:
+* `record` [**JSONObject**] - The complete record of the change:
 
-    - For a "add" or "update" record, it is the complete record to insert (locally or remotely); or
-    - For a "remote" record, the only properties expected are:
+    - For a "add" or "update" action, `record` is the complete record to insert (locally or remotely); or
+    - For a "remove" action, `record` only contains the following properties:
 
         - `last_modified` (set to the relevant server timestamp, or `0` if not known)
         - `deleted` (set to `true`)
 
 * `conflicts`: [**integer**] - the record in the `pending` collection this record conflicts with (missing or `0` if it does not conflict).
 
-## Staging and Tracking Changes
-
 Whenever a change is to be tracked (whether that change comes from remote storage or a local modification), the `pending` collection is queried for an existing record (by source, collection, and id) before a record is inserted.  If there is an existing `pending `record, it is updated with the latest; otherwise a new record is inserted.
 
 When an item or keystore is changed locally, a record is inserted/updated into the `pending` collection rather than directly applying to the `items` or `keystores`.  When remote changes are fetched, a record for each is inserted/updated into the `pending` collection.
+
+### Markers
+
+In addition to tracking the actual changes, the markers (i.e., [server timestamps](#server-timestamps)) are also tracked locally. The marker for each collection is stored on the device in IndexedDB via the `markers` collection:
+
+```
+{
+  "collection": "keystores" | "items",
+  "etag": string
+}
+```
+
+* `collection` [**string**] (_primary key_) - The name of the collection; this can be one of "items" or "keystores".
+* `etag` [**string**] - The latest remote server timestamp for the associated collection, conveyed as the ETag HTTP response header.
 
 ### On-Device Item Queries
 
@@ -110,7 +144,7 @@ When a local change is made to an item, the follow is performed:
         4. The item is encrypted using its item key and applied to the `encrypted` property of the pending `record`.
         5. The `last_modified` value for the pending `record` is set to the value from the existing stable record, if present.
 
-    - For "remote":
+    - For "remove":
 
         1. The pending `record` property is set with the following properties:
 
@@ -120,28 +154,6 @@ When a local change is made to an item, the follow is performed:
 4. The `pending` record is inserted/updated.
 
 5. The IndexedDB transaction is committed.
-
-## Remote Storage
-
-The remote storage is managed via a [Kinto] server instance.  Kinto is essentially a RESTful key/value record store, with records managed with a collection, and a collection managed within a bucket.  Buckets and collections can also have application-specific meta-data associated with them.  It can provide a per-user default bucket (referred to as "default").
-
-Authentication and authorization to Kinto is performed using [Firefox Accounts][fxa] and [OAUTH] bearer tokens, with at least the following scopes:
-
-* `profile` - Access to the user's identifier (uid).
-* `https://identity.firefox.com/apps/lockbox` - The Lockbox application feature.
-
-Lockbox uses the following collections in the (per-user) `default` bucket:
-
-* `lockbox_items` ("/buckets/default/collections/lockbox_items") - The collection of Lockbox item records.
-* `lockbox_keystores` ("/buckets/default/collections/lockbox_keystores") - The collection of Lockbox item keystores (usually there is only one entry).
-
-### Server Timestamps
-
-All buckets, collections, and records have a server-maintained last modified timestamp.  This value is provided in a record/collection/bucket's representation under the `last_modified` property as an integer, and is returned as an [ETag] response header.
-
-For lists (collections in a bucket, records in a collection), the timestamp is used on "list" GET requests via a `_since` query parameter to limit response data to any changes (including creates, updates, and deletes) after that timestamp.
-
-For individual values (a record, or metadata on a collection or bucket), the timestamp is used via the `If-Match` HTTP request header to prevent updates or deletes if the record has changed since last operated on the server.
 
 ## Sync Process
 
@@ -169,24 +181,6 @@ The following steps are performed during a sync:
 Generally each step is executed for both collections before moving onto the next step; first for `items` then for `keystores`.
 
 Each of the above steps opens and commits an IndexedDB transaction; this helps mitigate 
-
-### Markers
-
-Each sync operation begins with examining the collection markers and ends with advancing those markers.  Each collection marker is the [`ETag`][etag] HTTP response header value from the previous operation; if there is no previous sync operation, the value is treated as `0`.  The marker is stored on the device in IndexedDB via the `markers` collection:
-
-```
-{
-  "collection": "keystores" | "items",
-  "etag": string
-}
-```
-
-* `collection` [**string**] (_primary key_) - The name of the collection; this can be one of "items" or "keystores".
-* `etag` [**string**] - The latest remote server timestamp for the associated collection, conveyed as the ETag HTTP response header.
-
-### Initial vs. Incremental Sync
-
-The lack of `markers` is used to indicate this is an initial sync operation.  In this case, all records in the stable collections (`items` and `keystores`) are treated as if they are "local" "add" changes in the `pending` collection.
 
 ### Verifying Remote Authorization
 
@@ -230,7 +224,7 @@ Once authorization is verified, the next step of a sync operation is to fetch th
             - If the remote record is marked as "deleted" and there eis no existing stable record, discard the incoming remote change (and delete any existing `pending` "remote" record).
             - If there is an existing stable record, and its `encrypted` value exactly matches the incoming remote record, disregard the incoming remote change (and delete any existing `pending` remote record); the `last_modified` value of the stable collection's record is updated to match the remote record before the remote record is discarded.
             - If there is an existing stable record but its `encrypted` value does not exactly match the incoming remote record, treat the remote change as an "update".
-            - If there is no existing stable record iin the targeted collection, treat the remote change as an "add".
+            - If there is no existing stable record in the targeted collection, treat the remote change as an "add".
 
         3. The "remote" change record is inserted/updated into the `pending` collection.
 
@@ -333,7 +327,6 @@ Item conflicts are reconciled as follows:
         1. The search hashes for `origins` and `tags` are recalculated and applied to the record.
         2. The `active` property is changed to properly reflect the working item's `disabled` state.
         3. The working item is encrypted using its item key; this ciphertext replaces the record's `encrypted` value.
-        `disabled` state. 
         4. The `last_modified` value from the matching "remote" record in `pending` is applied to this record.
         5. This "local" record is updated in the `pending` collection.
 
@@ -395,6 +388,10 @@ The next step after reconciling any conflicts is to apply the remaining pending 
 3. The IndexedDB transaction is committed.
 
 If any records failed to be applied, the sync process is performed again.
+
+### Initial vs. Incremental Sync
+
+The lack of `markers` is used to indicate this is an initial sync operation.  In this case, all records in the stable collections (`items` and `keystores`) are treated as if they are "local" "add" changes in the `pending` collection.
 
 ## Occurrence and Frequency
 
@@ -497,6 +494,6 @@ The following indexes are removed:
 [ETag]: https://en.wikipedia.org/wiki/HTTP_ETag
 [FxA]: ./fxa.md
 [IndexedDB]: https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API
-[kinto]: (https://kinto.readthedocs.io/)
+[kinto]: https://kinto.readthedocs.io/
 [kinto-http.js]: https://doc.esdoc.org/github.com/Kinto/kinto-http.js/
 [OAuth]: https://oauth.net/
