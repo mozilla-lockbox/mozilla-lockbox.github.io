@@ -11,21 +11,21 @@ Cloud-based synchronization can provide a user reliable access to their logins. 
 
 The approach taken here depends heavily on the following technologies:
 
-* [kinto] for remote cloud storage; via the [kinto-http.js] library.
+* [Kinto] for remote cloud storage; via the [kinto-http.js] library.
 * [IndexedDB] for on-device data caching and management; via the [Dexie] library.
 
 ## Terms
 
 For the purposes of this document, the various states are used:
 
-* `stable` - An item or keystore whose representation is agreed to by both remote and local storage.
+* `stable` - An item or keystore whose representation is agreed on by both remote and local storage.
 * `remote` - An item or keystore whose representation changed in remote storage compared to the current stable state.
-* `local` - An item or keystore whose representation change in local storage compared to the current stable state..
+* `local` - An item or keystore whose representation changed in local storage compared to the current stable state.
 * `working` - An item or keystore in the process of conflict reconciliation.
 
 The following terms are also used:
 
-* `item` - The representation of a Lockbox entry (i.e., stored login credentials), realized as a JSON object.
+* `item` - The representation of a Lockbox entry (_e.g._, stored login credentials), realized as a JSON object.
 * `keystore` - The representation of Lockbox's item keystore, realized as a JSON objet.
 * `record` - The persisted representation of an item or keystore; this contains additional unencrypted metadata alongside the encrypted item, realized as a JSON object.
 
@@ -40,8 +40,8 @@ Authentication and authorization to Kinto is performed using [Firefox Accounts][
 
 Lockbox uses the following collections in the (per-user) `default` bucket:
 
-* `lockbox_items` ("/buckets/default/collections/lockbox_items") - The collection of Lockbox item records.
-* `lockbox_keystores` ("/buckets/default/collections/lockbox_keystores") - The collection of Lockbox item keystores (usually there is only one entry).
+* `lockbox_items` (`"/buckets/default/collections/lockbox_items"`) — The collection of Lockbox item records.
+* `lockbox_keystores` (`"/buckets/default/collections/lockbox_keystores"`) — The collection of Lockbox item keystores. Usually there is only one entry.
 
 ### Server Timestamps
 
@@ -82,15 +82,15 @@ Changes are first placed in the `pending` collection before they are applied to 
         - `last_modified` (set to the relevant server timestamp, or `0` if not known)
         - `deleted` (set to `true`)
 
-* `conflicts`: [**integer**] - the record in the `pending` collection this record conflicts with (missing or `0` if it does not conflict).
+* `conflicts`: [**integer**] - the index of a record in the `pending` collection with which this record conflicts (absent or `0` if it does not conflict).
 
-Whenever a change is to be tracked (whether that change comes from remote storage or a local modification), the `pending` collection is queried for an existing record (by source, collection, and id) before a record is inserted.  If there is an existing `pending `record, it is updated with the latest; otherwise a new record is inserted.
+Whenever a change is to be tracked (whether that change comes from remote storage or a local modification), the `pending` collection is queried for an existing record (by source, collection, and id) before a record is inserted.  If there is an existing `pending` record, it is updated with the latest changes; otherwise a new record is inserted.
 
-When an item or keystore is changed locally, a record is inserted/updated into the `pending` collection rather than directly applying to the `items` or `keystores`.  When remote changes are fetched, a record for each is inserted/updated into the `pending` collection.
+When an item or keystore is changed locally, a record is inserted/updated into the `pending` collection rather than directly applying to the `items` or `keystores` collections.  When remote changes are fetched, a record for each is inserted/updated into the `pending` collection.
 
 ### Markers
 
-In addition to tracking the actual changes, the markers (i.e., [server timestamps](#server-timestamps)) are also tracked locally. The marker for each collection is stored on the device in IndexedDB via the `markers` collection:
+In addition to tracking the actual changes, the markers (_i.e._, [server timestamps](#server-timestamps)) are also tracked locally. The marker for each collection is stored on the device in IndexedDB via the `markers` collection:
 
 ```
 {
@@ -104,7 +104,7 @@ In addition to tracking the actual changes, the markers (i.e., [server timestamp
 
 ### On-Device Item Queries
 
-When listing items -- or retrieving a specific items -- the `pending` collection (for source "local") is queried first, then the stable `items` collection is queried.
+When listing items — or retrieving a specific items — the `pending` collection (for source "local") is queried first, then the stable `items` collection is queried, with local items taking precedence over their stable ancestor.
 
 ### On-Device Item Changes
 
@@ -113,16 +113,12 @@ When a local change is made to an item, the follow is performed:
 1. A read/write IndexedDB transaction is opened against the collections `pending` and the targeted stable collection (`items` or `keystores`).
 
 2. The `pending` collection is queried for an existing record with `id` matching the modified record's id, in the "item" `collection` and the "local" `source`:
-
     -  If an existing `pending` record is not found, the "stable" item is used as the source for generating history patches and an empty record is initialized:
-
         - `source` is set to "local".
         - `collection` is set to "item".
         - `id` is set to the changed item's id.
         - `action` is set as appropriate ("add", "update", or "remove").
-    
-    - If an existing `pending` record is found, it's recorded item is used as the source for generating history patches and this record is retained and updated to reflect these new changes:
-
+    - If an existing `pending` record is found, its recorded item is used as the source for generating history patches and this record is retained and updated to reflect these new changes:
         - If the `pending` record's `action` is "add" or "update" and this change is a "remove", the `action` property is set to "remove";
         - If the `pending` record's `action` is "remove" and this change is an "add" or "update", the `action` property is set to the incoming action;
         - Otherwise, the `pending` record's `action` property is unchanged.
@@ -130,24 +126,20 @@ When a local change is made to an item, the follow is performed:
 4. The appropriate steps for the action are applied:
 
     - For "add":
-
         1. The new item is validated.
         2. If there is already a `pending` record for this item, a history entry is created and prepended using the changed item as the source and the `pending` item as the patch source.
         3. The `origin` and `tags` hashes are generated and applied to the pending `record` object.
         4. The item is encrypted using its item key (creating a new one if it does not yet exist) and applied to the `encrypted` property of the pending `record`.
     
     - For "update":
-
         1. The changed item is validated.
         2. A history entry is created and prepended using the changed item as the source and the appropriate source item as the patch source.
-        3. The `origin` and `tags` hashes are generated and applied tot the pending `record` object.
+        3. The `origin` and `tags` hashes are generated and applied to the pending `record` object.
         4. The item is encrypted using its item key and applied to the `encrypted` property of the pending `record`.
         5. The `last_modified` value for the pending `record` is set to the value from the existing stable record, if present.
 
     - For "remove":
-
         1. The pending `record` property is set with the following properties:
-
             - `deleted` set to true.
             - `last_modified` set to the stable item's record, if present.
 
@@ -160,22 +152,18 @@ When a local change is made to an item, the follow is performed:
 The following steps are performed during a sync:
 
 1. Verify authorization to remote storage service
-
     - **NOTE**: If this step fails, an error is propagated and the sync operation is terminated.
 
 2. Fetch remote changes
 3. Examine pending changes (and apply non-conflicting remote changes to stable)
 4. Reconcile any "update" conflicts (and treat as local changes)
-
     - **NOTE**: this step is skipped if the datastore is locked
 
 5. Apply local changes to remote
-
     - **NOTE**: this step is skipped for any unresolved conflicts.
     - **NOTE**: this step is skipped if a network connection to the remote storage service is not available.
 
 6. Apply local changes to (on-device) stable collections
-
     - **NOTE**: this step is skipped for any changes not applied to the remote storage service.
 
 Generally each step is executed for both collections before moving onto the next step; first for `items` then for `keystores`.
@@ -190,15 +178,13 @@ Verification is performed as follows:
 
 1. The cached access token is examined; access token is missing or expired, an attempt is made to refresh it.
 2. A request is made for the user's profile information:
-
   - If this request fails with an HTTP error code of **403 (Unauthorized)**, an attempt is made to refresh it.
   - If this request succeeds, the user's authorization is valid.
 
 Expired, invalidated, or missing access token can be refreshed as follows:
 
 1. The cached refresh token is examined; if there is no refresh token, any existing access token is cleared from device cache and verification fails with a `AUTH` error.
-2. A POST HTTPS request is made to the FxA OAuth token endpoint, with a grant_type of "refresh_token" and including the cached refresh token:
-
+2. A `POST` HTTPS request is made to the FxA OAuth token endpoint, with a `grant_type` of "refresh_token" and including the cached refresh token:
     - If this request fails, any cached access and refresh tokens are cleared from device cache and verification fails with a `AUTH` error.
     - If this request succeeds, the newly obtained access token is cached along with its new expiration time, and the verification process starts over.
 
@@ -212,20 +198,15 @@ Once authorization is verified, the next step of a sync operation is to fetch th
     1. The marker for the collection is retrieved from the on-device cache, if available.
     2. An HTTP "GET" request is made for the collection; the query parameter `_since` is set to the marker value if available, or omitted otherwise.
     3. Each record in the HTTP response is examined and applied to the `pending` collection:
-
         1. The `pending` collection is queried for an existing "stable" record, matched by `id` with the "remote" source:
-
             - If there is an existing `pending` record, it will be updated to match the latest remote changes.
             - If there is no existing `pending` record, a new `pending` record will be created and inserted.
-
         2. Determine the `action` for this remote change; the targeted stable collection is queried for an existing record matched by `id`:
-
             - If the remote record has a `deleted` property set to `true` and there is an existing stable record, treat the remote change as "remove".
             - If the remote record is marked as "deleted" and there eis no existing stable record, discard the incoming remote change (and delete any existing `pending` "remote" record).
             - If there is an existing stable record, and its `encrypted` value exactly matches the incoming remote record, disregard the incoming remote change (and delete any existing `pending` remote record); the `last_modified` value of the stable collection's record is updated to match the remote record before the remote record is discarded.
             - If there is an existing stable record but its `encrypted` value does not exactly match the incoming remote record, treat the remote change as an "update".
             - If there is no existing stable record in the targeted collection, treat the remote change as an "add".
-
         3. The "remote" change record is inserted/updated into the `pending` collection.
 
 4. The `markers` records for all collections are updated with the [ETag] HTTP response header value.
@@ -243,13 +224,11 @@ This step is performed as follows:
     1. The `pending` collection is queried for all records for the given collection and separated into separate maps (id => record) based on `source` ("local" versus "remote").
 
     2. Each element in the "remote" map is examined and one of the following actions taken:
-
         * _There is no corresponding element in the "local" map_: insert/update/remove the matching record in the target collection, delete the record from the `pending` collection, and remove it from the "remote" map.
         * _This "remote" records is an "update" and there is a corresponding "local" record to "remove"_: update the matching record in the target collection, delete the "remote" and "local" records from the `pending` collection, and remove it from both maps.
         * _This "remote" record is a "remove" and there is a corresponding "local" record to "remove"_: remove the matching record in the target collection, delete the "remote" and "local" records from the `pending` collcetion, and remove it from both maps.
         * _This "remote" record is a "remove" and there is a corresponding "local" record to "update"_: delete the "remote" record from the `pending` collection, and remove it from the "remote" map.
         * _This "remote" record is an "update" and there is a corresponding "local" record to "update"_: The records are reserved to later reconcile the conflicts as appropriate ([`items`](#item-conflicts) or [`keystores`](#keystore-conflicts)):
-
             - The `conflicts` property of the "local" `pending` record is set to the `key` of the "remote" `pending` record.
             - The `conflicts` property of the "remote" `pending` record is set to the `key` of the "local" `pending` record.
 
@@ -257,7 +236,7 @@ This step is performed as follows:
 
 ### Reconciling "Update" Conflicts
 
-Conflicts can occur when a change is made both in the local state and remote state.  For instance, the user made changes to an item's title on their mobile device while there was no network access (e.g., airplane mode), and also made changes to the same item's tags ore origins on their desktop; or the user added an item independently on both devices, resulting in a conflict of the keystores.
+Conflicts can occur when a change is made both in the local state and remote state.  For instance, the user made changes to an item's title on their mobile device while there was no network access (_e.g._, airplane mode), and also made changes to the same item's tags ore origins on their desktop; or the user added an item independently on both devices, resulting in a conflict of the keystores.
 
 **Note** that the datastore needs to be unlocked before conflicts can be reconciled; such changes will be held until the datastore is unlocked, and all other changes will be applied if possible.
 
@@ -324,13 +303,12 @@ Item conflicts are reconciled as follows:
 
         4. Perform a [merge](#merging-origins) (local, stable, remote) of the `origins` property.
         5. Perform a [merge](#merging-tags) (local, stable, remote) of the `tags` property.
-        6. Perform a [merge](#merging-history] (local, stanle, remote) of the `history` array.
+        6. Perform a [merge](#merging-history) (local, stable, remote) of the `history` array.
         7. Prepend a history entry, using `working.entry` as the source state and `remote.entry` as the target state.
         8. Prepend a history entry, using `working.entry` as the source state and `stable.entry` as the target state.
         9. Set the `modified` property to the current date/time.
 
     4. The working item is applied to the "local" record in `pending` as follows:
-
         1. The search hashes for `origins` and `tags` are recalculated and applied to the record.
         2. The `active` property is changed to properly reflect the working item's `disabled` state.
         3. The working item is encrypted using its item key; this ciphertext replaces the record's `encrypted` value.
@@ -345,7 +323,6 @@ For **BETA**, only one origin is supported.  To that end, the merging strategy f
 
 1. Note the first element of "local", "remote", and "stable"; a missing value is treated as `null`.
 2. Perform a comparison and retain the resolved value:
-
     - If "local" does not match "stable", keep "local"
     - If "local" does match "stable", apply "remote"
 
@@ -356,12 +333,10 @@ For **BETA**, only one origin is supported.  To that end, the merging strategy f
 For **BETA**, tags may not be supported.  However, potential loss here is far less critical than other properties; the general strategy is to "difference" and "merge" the values.
 
 1. Calculate the changes made by "local":
-
     - Calculate the difference of "local" over "stable", and note as "local-add".
     - Calculate the difference of "stable" over "local", and note as "local-rem".
 
 2. Calculate the changes made by "remote":
-
     - Calculate the difference of "remote" over "stable", and note as "remote-add".
     - Calculate the difference of "stable" over "remote", and note as "remote-rem".
 
@@ -385,15 +360,13 @@ The next step after reconciling any conflicts is to apply the remaining pending 
 2. For each targeted collection (first `items` then `keystores`):
 
     1. The `pending` collection is queried for all records for the targeted collection; any `pending` record with unresolved conflicts is skipped.
-    2. A kinto [batch operation](http://kinto.readthedocs.io/en/stable/api/1.x/batch.html) is constructed and sent to the remote storage service; for each `pending` "local" record:
-
-        - The `method` is set based on the record's `action` ("PUT" for "add" or "update"; "DELETE" for "remove").
+    2. A Kinto [batch operation](http://kinto.readthedocs.io/en/stable/api/1.x/batch.html) is constructed and sent to the remote storage service; for each `pending` "local" record:
+        - The `method` is set based on the record's `action` (`PUT` for "add" or "update"; `DELETE` for "remove").
         - The `path` is set to the full path of the targeted record.
         - The `body` is set to the record's `record` value.
         - The `headers` is set to include `If-Match` set to the `last_modified` property if known, or include `If-None-Match` set to "*" otherwise.
     
     3. The response from the remote storage service is processed; for each element in the response's `responses` array:
-
         - If it is a success, the corresponding `pending` record is applied to the on-device stable collection, the on-device stable collection's record's `last_modified` is updated to this response's `last_modified` value, and the `pending` record is deleted.
         - If it is a failure, the corresponding `pending` record is saved, and the failure is noted.
 
@@ -409,21 +382,18 @@ The following are performed prior to the rest of the sync process to prepare an 
 
 1. A read/write IndexedDB transaction is opened against the `pending` and stable collcetions (`items` and `keystores`).
 2. For each record in the stable collections, a record is inserted into the `pending` collection:
-
     1. The `pending` collections is queried to verify an existing record for this stable record is not present: if a `pending` record is present then its `record` property is updated; otherwise a new `pending` record is prepared:
-
         1. The `source` property is set to "local".
         2. The `action` property is set to "add"
         3. The `collection` and `id` properties are set appropriate to this stable record.
         4. The `record` property is set to a clone of this stable record.
-
     2. The new `pending` record is inserted/updated.
 
 3. The IndexedDB transaction is committed.
 
 ## Occurrence and Frequency
 
-Lockbox automatically attempts to sync the user's data between the device and remote storage transparently and unobtrusively.  Additionally, Lockbox provides a action that lets the user to immediately trigger a sync.
+Lockbox automatically attempts to sync the user's data between the device and remote storage transparently and unobtrusively.  Additionally, Lockbox provides a action that lets the user immediately trigger a sync.
 
 ### Desktop Triggers
 
@@ -450,9 +420,9 @@ The difference in time-based durations between desktop and mobile are an attempt
 The sync process has various points at which a failure can occur:
 
 * `OFFLINE` - There is no network connectivity to the remote storage services; connectivity needs to be restored before sync can continue.
-* `NETWORK` - A network error -- other than lack of connectivity -- was detected.
+* `NETWORK` - A network error — other than lack of connectivity — was detected.
 * `AUTH` - The remote service access tokens have expired or are missing; the user needs to authenticate before sync and continue.
-* `SYNC_LOCKED` - There is a conflict detected between the local and remote changes; the datastore needs to be unlock in order to reconcile.
+* `SYNC_LOCKED` - There is a conflict detected between the local and remote changes; the datastore needs to be unlocked in order to reconcile.
 
 In almost all cases, these errors occur outside of direct user interaction.  It is necessary to surface these conditions to the user in a manner that is not overly disruptive yet still noticeable.
 
@@ -467,7 +437,7 @@ The following telemetry event is used to record sync interactions.
 
 ## Schema Changes
 
-The on-device IndexedDB database originally documented in [data storage]()
+The on-device IndexedDB database originally documented in [data storage]().
 
 ### `keystore` Changes
 
@@ -492,6 +462,6 @@ The following indexes are removed:
 [ETag]: https://en.wikipedia.org/wiki/HTTP_ETag
 [FxA]: ./fxa.md
 [IndexedDB]: https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API
-[kinto]: https://kinto.readthedocs.io/
+[Kinto]: https://kinto.readthedocs.io/
 [kinto-http.js]: https://doc.esdoc.org/github.com/Kinto/kinto-http.js/
 [OAuth]: https://oauth.net/
