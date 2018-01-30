@@ -184,7 +184,7 @@ Verification is performed as follows:
 Expired, invalidated, or missing access token can be refreshed as follows:
 
 1. The cached refresh token is examined; if there is no refresh token, any existing access token is cleared from device cache and verification fails with a `AUTH` error.
-2. A `POST` HTTPS request is made to the FxA OAuth token endpoint, with a `grant_type` of "refresh_token" and including the cached refresh token:
+2. An HTTPS `POST` request is made to the FxA OAuth token endpoint, with a `grant_type` of "refresh_token" and including the cached refresh token:
     - If this request fails, any cached access and refresh tokens are cleared from device cache and verification fails with a `AUTH` error.
     - If this request succeeds, the newly obtained access token is cached along with its new expiration time, and the verification process starts over.
 
@@ -196,7 +196,7 @@ Once authorization is verified, the next step of a sync operation is to fetch th
 2. For each targeted collection:
 
     1. The marker for the collection is retrieved from the on-device cache, if available.
-    2. An HTTP "GET" request is made for the collection; the query parameter `_since` is set to the marker value if available, or omitted otherwise.
+    2. An HTTPS `GET` request is made for the collection; the query parameter `_since` is set to the marker value if available, or omitted otherwise.
     3. Each record in the HTTP response is examined and applied to the `pending` collection:
         1. The `pending` collection is queried for an existing "stable" record, matched by `id` with the "remote" source:
             - If there is an existing `pending` record, it will be updated to match the latest remote changes.
@@ -380,7 +380,7 @@ The lack of `markers` is used to indicate if an initial sync operation is necess
 
 The following are performed prior to the rest of the sync process to prepare an initial sync:
 
-1. A read/write IndexedDB transaction is opened against the `pending` and stable collcetions (`items` and `keystores`).
+1. A read/write IndexedDB transaction is opened against the `pending` and stable collections (`items` and `keystores`).
 2. For each record in the stable collections, a record is inserted into the `pending` collection:
     1. The `pending` collections is queried to verify an existing record for this stable record is not present: if a `pending` record is present then its `record` property is updated; otherwise a new `pending` record is prepared:
         1. The `source` property is set to "local".
@@ -393,7 +393,7 @@ The following are performed prior to the rest of the sync process to prepare an 
 
 ## Occurrence and Frequency
 
-Lockbox automatically attempts to sync the user's data between the device and remote storage transparently and unobtrusively.  Additionally, Lockbox provides a action that lets the user immediately trigger a sync.
+Lockbox automatically attempts to sync the user's data between the device and remote storage transparently and unobtrusively.  Additionally, Lockbox provides an action that lets the user immediately trigger a sync.
 
 ### Desktop Triggers
 
@@ -437,7 +437,7 @@ The following telemetry event is used to record sync interactions.
 
 ## Schema Changes
 
-The on-device IndexedDB database originally documented in [data storage]().
+The on-device IndexedDB database originally documented in [data storage].
 
 ### `keystore` Changes
 
