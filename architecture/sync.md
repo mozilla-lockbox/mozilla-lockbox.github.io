@@ -216,6 +216,8 @@ Once authorization is verified, the next step of a sync operation is to fetch th
 
 The next step after fetching remote changes is to examine the pending changes for conflicting changes, and applying any pending "remote" changes that have no conflicts.
 
+This "first pass" on reconciling changes adheres to the basic theme **_favor `update` actions over `remove` actions_**. The rationale is that -- when conflicting actions are encountered -- it is better to keep data the user meant to remove than it is to remove data the user meant to keep (and update).
+
 This step is performed as follows:
 
 1. A read/write IndexedDB transaction is opened against the `pending` and targeted collections (`items` and `keystores`).
@@ -275,10 +277,7 @@ The steps to resolve keystore conflicts are as follows:
 
 #### Item Conflicts
 
-Reconciling conflicting item changes start with the following basic rules:
-
-* _Favor "update" actions over "remove" actions_. If an item is both removed and updated, treat it as updated.
-* _Favor local changes over remote changes_. For a given change within an item, favor the local change over the remote change.
+Reconciling conflicting changes within an item adheres to the basic theme **_favor `local` changes over `remote` changes_**.  The rationale is that any changes made on a device trigger an immediate sync, and therefore are more likely to match the user's current intent.
 
 Item conflicts are reconciled as follows:
 
