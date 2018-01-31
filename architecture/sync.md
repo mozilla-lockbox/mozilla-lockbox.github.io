@@ -26,7 +26,7 @@ For the purposes of this document, the various states are used:
 The following terms are also used:
 
 * `item` - The representation of a Lockbox entry (_e.g._, stored login credentials), realized as a JSON object.
-* `keystore` - The representation of Lockbox's item keystore, realized as a JSON objet.
+* `keystore` - The representation of Lockbox's item keystore, realized as a JSON object.
 * `record` - The persisted representation of an item or keystore; this contains additional unencrypted metadata alongside the encrypted item, realized as a JSON object.
 
 ## Remote Storage
@@ -157,7 +157,7 @@ The following steps are performed during a sync:
 2. Fetch remote changes
 3. Examine pending changes (and apply non-conflicting remote changes to stable)
 4. Reconcile any "update" conflicts (and treat as local changes)
-    - **NOTE**: this step is skipped if the datastore is locked
+    - **NOTE**: this step is skipped if the datastore is locked.
 
 5. Apply local changes to remote
     - **NOTE**: this step is skipped for any unresolved conflicts.
@@ -176,7 +176,7 @@ Before the sync operation can begin in earnest, authorization to the remote serv
 
 Verification is performed as follows:
 
-1. The cached access token is examined; access token is missing or expired, an attempt is made to refresh it.
+1. The cached access token is examined; if the access token is missing or expired, an attempt is made to refresh it.
 2. A request is made for the user's profile information:
   - If this request fails with an HTTP error code of **403 (Unauthorized)**, an attempt is made to refresh it.
   - If this request succeeds, the user's authorization is valid.
