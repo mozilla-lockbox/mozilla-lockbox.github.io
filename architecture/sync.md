@@ -123,7 +123,7 @@ When a local change is made to an item, the follow is performed:
         - If the `pending` record's `action` is "remove" and this change is an "add" or "update", the `action` property is set to the incoming action;
         - Otherwise, the `pending` record's `action` property is unchanged.
 
-4. The appropriate steps for the action are applied:
+3. The appropriate steps for the action are applied:
 
     - For "add":
         1. The new item is validated.
@@ -209,8 +209,8 @@ Once authorization is verified, the next step of a sync operation is to fetch th
             - If there is no existing stable record in the targeted collection, treat the remote change as an "add".
         3. The "remote" change record is inserted/updated into the `pending` collection.
 
-4. The `markers` records for all collections are updated with the [ETag] HTTP response header value.
-5. The IndexedDB transaction is committed.
+3. The `markers` records for all collections are updated with the [ETag] HTTP response header value.
+4. The IndexedDB transaction is committed.
 
 ### Examining and Applying Pending Changes from Remote
 
@@ -281,8 +281,8 @@ Reconciling conflicting changes within an item adheres to the basic theme **_fav
 
 Item conflicts are reconciled as follows:
 
-2. The `pending` collection is queried for records targeting "items", and grouped by id.
-3. For each unique id:
+1. The `pending` collection is queried for records targeting "items", and grouped by id.
+2. For each unique id:
 
     1. A working item is constructed as follows:
 
@@ -307,14 +307,14 @@ Item conflicts are reconciled as follows:
         8. Prepend a history entry, using `working.entry` as the source state and `stable.entry` as the target state.
         9. Set the `modified` property to the current date/time.
 
-    4. The working item is applied to the "local" record in `pending` as follows:
+    2. The working item is applied to the "local" record in `pending` as follows:
         1. The search hashes for `origins` and `tags` are recalculated and applied to the record.
         2. The `active` property is changed to properly reflect the working item's `disabled` state.
         3. The working item is encrypted using its item key; this ciphertext replaces the record's `encrypted` value.
         4. The `last_modified` value from the matching "remote" record in `pending` is applied to this record.
         5. This "local" record is updated in the `pending` collection.
 
-    5. The "remote" record in `pending` is deleted from the collection.
+    3. The "remote" record in `pending` is deleted from the collection.
 
 ##### Merging `origins`
 
