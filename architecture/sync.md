@@ -31,7 +31,7 @@ The following terms are also used:
 
 ## Remote Storage
 
-The remote storage is managed via a [Kinto] server instance.  Kinto is essentially a RESTful key/value record store, with records managed with a collection, and a collection managed within a bucket.  Buckets and collections can also have application-specific meta-data associated with them.  It can provide a per-user default bucket (referred to as "default").
+The remote storage is managed via a [Kinto] server instance.  Kinto is essentially a RESTful key/value record store, with records managed with a collection, and a collection managed within a bucket.  Buckets and collections can also have application-specific metadata associated with them.  It can provide a per-user default bucket (referred to as "default").
 
 Authentication and authorization to Kinto is performed using [Firefox Accounts][fxa] and [OAUTH] bearer tokens, with at least the following scopes:
 
@@ -216,7 +216,7 @@ Once authorization is verified, the next step of a sync operation is to fetch th
 
 The next step after fetching remote changes is to examine the pending changes for conflicting changes, and applying any pending "remote" changes that have no conflicts.
 
-This "first pass" on reconciling changes adheres to the basic theme **_favor `update` actions over `remove` actions_**. The rationale is that -- when conflicting actions are encountered -- it is better to keep data the user meant to remove than it is to remove data the user meant to keep (and update).
+This "first pass" on reconciling changes adheres to the basic theme **_favor `update` actions over `remove` actions_**. The rationale is that – when conflicting actions are encountered – it is better to keep data the user meant to remove than it is to remove data the user meant to keep (and update).
 
 This step is performed as follows:
 
