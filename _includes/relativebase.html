@@ -1,0 +1,8 @@
+{% assign relativeBase = '' %}
+{% assign tempDepth = page.url | append: 'hackish-solution' | split: '/' | size | minus: 2 %}
+{% for i in (1..tempDepth) %}
+    {% assign relativeBase = relativeBase | append: "../" %}
+{% endfor %}
+{% if relativeBase == '' %}
+    {% assign relativeBase = './' %}
+{% endif %}
