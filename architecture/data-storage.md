@@ -81,9 +81,9 @@ The following diagram illustrates the tables used to store Lockbox items:
 ![Lockbox Database Format](images/data-storage-database-usage.png)
 
 - **Items table**: This table stores the actual Lockbox items. Each row is keyed by the item's UUID and its value is the JSON serialization of the item, encrypted using its associated item key.
-- **OriginHashes table**: This table stores (hashes of) origins associated with their Lockbox items.  Each row is keyed by the (hashed) origin and its value is the set of associated Lockbox items' UUIDs.  Ideally there should only be one item per origin hash, but users may have multiple items associated to the same origin (e.g. "gmail.com" login for both personal and work).
-- **TagHashes table**: This table stores the (hashes of) tags associated with their Lockbox items.  Each row is keyed by the (hashed) tag and its value is the set of associated Lockbox items' UUIDs.
-- **Keystores table**: This table stores the keys used to encrypt Lockbox items.  Each row is keyed a group name ("" for the default group) and its value is the keystore serialized to JSON, encrypted using the master encryption key.
+- **Origins table**: This table stores (hashes of) origins associated with their Lockbox items.  Each row is keyed by the (hashed) origin and its value is the set of associated Lockbox items' UUIDs.  Ideally there should only be one item per origin hash, but users may have multiple items associated to the same origin (e.g. "gmail.com" login for both personal and work).
+- **Tags table**: This table stores the (hashes of) tags associated with their Lockbox items.  Each row is keyed by the (hashed) tag and its value is the set of associated Lockbox items' UUIDs.
+- **Keystores table**: This table stores the keystore(s), which maintain the encryption keys used to encrypt Lockbox items.  Each row is keyed a group name ("" for the default group) and its value is the keystore serialized to JSON, encrypted using the master encryption key.
 
 ### Origin and Tag Hashing
 
@@ -116,7 +116,7 @@ The following diagram illustrates the various keys used in Lockbox:
 
 - **Firefox Application-derived key (app prekey)**: This value is generated from a user's FxA credentials specifically for this application ("lockbox"), and is used as an input factor to generate other encryption keys and hashing salts. It is never persisted to permanent storage. The other values generated from this prekey are:
   - **Encryption Key (enc key)**: This value is used to encrypt the item encryption keystore(s). This key **MAY** be persisted to permanent storage if it can be secured against other users on that device (and ideally from other applications running as the same user).
-  - **Hashing salt (hash salt)**: This value is used as the salt when generating search hashes for user data.  This key can be persisted to permanent storage, preferably secured from other users (and other applications running as the same user), but is not as critical as the encryption prekey.
+  - **Hashing salt (salt key)**: This value is used as the salt when generating search hashes for user data.  This key can be persisted to permanent storage, preferably secured from other users (and other applications running as the same user), but is not as critical as the encryption prekey.
 - **Item Key**: The item key is used to encrypt a specific Lockbox data item.  Item keys are maintained with an item keystore, which is itself encrypted using the master encryption key and synchronized via Kinto.
 
 ### FxA-based Salt Derivations
@@ -139,7 +139,7 @@ Deriving the hashing salt uses the following input factors:
 
 ### Item Key Generation
 
-Each item key is generated using a cryptographically strong source of entropy, such as from `window.crypto.getRandomValues() or crypto.subtle.generateKey()`.
+Each item key is generated using a cryptographically strong source of entropy, such as from `crypto.subtle.generateKey()`.
 
 ### Guest Mode
 
@@ -185,7 +185,7 @@ Finally, the precise value of "origins" elements is still to be determined. An i
 
 ### Storing Derived Keys
 
-The two derived keys ("enc key" and "hash salt"), while not used directly to encrypt data, do increase the success chances of attacks if stored on the user's devices in the clear.  The document ["Lockbox Secure Device Storage"][lockbox-secure-device-storage] provides a more complete discussion of options and approaches.
+The two derived keys ("enc key" and "salt key"), while not used directly to encrypt data, do increase the success chances of attacks if stored on the user's devices in the clear.  The document ["Lockbox Secure Device Storage"][lockbox-secure-device-storage] provides a more complete discussion of options and approaches.
 
 For the "enc key", storing this exposes the user's items to the attacker.  The best mitigation is to never store the encryption key.  The next best is restricting access -- ideally to only the specific application instance for the target user:
 
@@ -193,7 +193,7 @@ For the "enc key", storing this exposes the user's items to the attacker.  The b
 - Data protection solutions offered by the operating system help limit access to the user (and any application running as that user)
 - Secure enclaves on mobile devices help limit access to the specific application running for the user
 
-For the "hash salt", storing this allows an attacker to more easily generate the dictionary tables needed to match the hash input to the result, allowing an attacker to determine what origins and tags a user has associated items for.  However, the risk is far less than storing "enc key"; the hashing scheme documented herein requires the attacker to generate a table per targeted user and guess values for each user, changing from a passive data collection effort into an active data collection effort.
+For the "salt key", storing this allows an attacker to more easily generate the dictionary tables needed to match the hash input to the result, allowing an attacker to determine what origins and tags a user has associated items for.  However, the risk is far less than storing "enc key"; the hashing scheme documented herein requires the attacker to generate a table per targeted user and guess values for each user, changing from a passive data collection effort into an active data collection effort.
 
 ### Nonce Generation
 
