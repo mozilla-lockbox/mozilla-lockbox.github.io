@@ -114,9 +114,9 @@ The following diagram illustrates the various keys used in Lockbox:
 
 ![Lockbox Key Management](images/data-storage-key-management.png)
 
-- **Firefox Application-derived key (app prekey)**: This value is generated from a user's FxA credentials specifically for this application ("lockbox"), and is used as an input factor to generate other encryption keys and hashing salts. It is never persisted to permanent storage. The other values generated from this prekey are:
-  - **Encryption Key (enc key)**: This value is used to encrypt the item encryption keystore(s). This key **MAY** be persisted to permanent storage if it can be secured against other users on that device (and ideally from other applications running as the same user).
-  - **Hashing salt (salt key)**: This value is used as the salt when generating search hashes for user data.  This key can be persisted to permanent storage, preferably secured from other users (and other applications running as the same user), but is not as critical as the encryption prekey.
+- **Firefox Application-derived key (app prekey)**: This value is generated from a user's FxA credentials specifically for this application ("lockbox"), and is used as an input factor to generate other encryption keys and hashing salts. The values derived from this prekey are:
+  - **Encryption Key (enc key)**: This value is used to encrypt the item encryption keystore(s)
+  - **Hashing salt (salt key)**: This value is used as the salt when generating search hashes for user data.
 - **Item Key**: The item key is used to encrypt a specific Lockbox data item.  Item keys are maintained with an item keystore, which is itself encrypted using the master encryption key and synchronized via Kinto.
 
 ### FxA-based Salt Derivations
@@ -185,15 +185,11 @@ It is also possible for multiple items to have the same origin.  This is a much 
 
 Finally, the precise value of "origins" elements is still to be determined. An initial (possibly naive) approach is to use just the hostname.  However, it is likely desirable to match on a subdomain (e.g, matching "m.facebook.com" if there is an item with "facebook.com") but requires careful forethought (_e.g._, "myfacebook.com" must not match "facebook.com:) since the searches occur against cryptographic hashes.  Further research and experimentation needed to determine the correct approach.
 
-### Storing Derived Keys
+### Storing "Master" Keys and Salts
 
-The two derived keys ("enc key" and "salt key"), while not used directly to encrypt data, do increase the success chances of attacks if stored on the user's devices in the clear.  The document ["Lockbox Secure Device Storage"][lockbox-secure-device-storage] provides a more complete discussion of options and approaches.
+The application prekey and the two derived keys ("enc key" and "salt key") vastly increase the success chances of attacks if stored on the user's devices in the clear.  The document ["Lockbox Secure Device Storage"][lockbox-secure-device-storage] provides a more complete discussion of options and approaches.
 
-For the "enc key", storing this exposes the user's items to the attacker.  The best mitigation is to never store the encryption key.  The next best is restricting access -- ideally to only the specific application instance for the target user:
-
-- Device-wide encryption helps limit access to anyone that can login to the device as a trusted user
-- Data protection solutions offered by the operating system help limit access to the user (and any application running as that user)
-- Secure enclaves on mobile devices help limit access to the specific application running for the user
+Storing the application prekey exposes the user's items to the attacker, if the attacker can determine the derivation parameters (which are not themselves secret).  Storing the "enc key" also exposes the user's items to the attacker, but with the obstacles of derivation already removed.  These values **MUST NOT** be stored unless the device has secure data isolation between users (and ideally between running applications) and the data remains on the device under the control of Lockbox.
 
 For the "salt key", storing this allows an attacker to more easily generate the dictionary tables needed to match the hash input to the result, allowing an attacker to determine what origins and tags a user has associated items for.  However, the risk is far less than storing "enc key"; the hashing scheme documented herein requires the attacker to generate a table per targeted user and guess values for each user, changing from a passive data collection effort into an active data collection effort.
 
