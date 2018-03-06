@@ -141,14 +141,6 @@ Deriving the hashing salt uses the following input factors:
 
 Each item key is generated using a cryptographically strong source of entropy, such as from `crypto.subtle.generateKey()`.
 
-### Guest Mode
-
-Lockbox currently supports a "guest mode" usage, that follows this document with the following differences:
-
-* The FxA user id (used for deriving other keying material) is treated as the empty string ("").
-* The master encryption key is a well-known and hard-coded value, per application (_e.g._, desktop extension versus iOS application versus Android application).
-* All data is stored **ONLY** locally in IndexedDB; there is no Kinto sync.
-
 ## Import and Migration
 
 ### From Firefox Logins
@@ -175,13 +167,23 @@ The following table assumes migration from the JSON format stored on disk:
 
 ## Security Considerations
 
+### Guest Mode
+
+Lockbox currently supports a "guest mode" usage, providing a path to ramp up user's security hygiene. This mode adheres to this document with the following differences:
+
+* The FxA user id (used for deriving other keying material) is treated as the empty string ("").
+* The master encryption key is a well-known and hard-coded value, per application (_e.g._, desktop extension versus iOS application versus Android application).
+* All data is stored **ONLY** locally on the user's device; there is no interaction with cloud-based services.
+
+"Guest mode" does not significantly improve data protection over simply storing files onto their devices.  However, by maintaining consistency with the FxA-backed security features, it reduces potential vulnerabilities between trial uses and more secure credential-based uses.
+
 ### Item Origins
 
 Each Lockbox item permits multiple origins to be associated with it.  However, having more than one origin should be rare, and the user should be warned that providing multiple origins increases the risk of compromise.  Lockbox should never automatically add more than one origin to a given item, it **MUST** be left to the user to do this.
 
 It is also possible for multiple items to have the same origin.  This is a much more common occurrence, for instance a user that has both personal and business/work accounts to a cloud-based service (_e.g._, Gmail).
 
-Finally, the precise value of "origins" elements is still to be determined. An initial (possibly naive) approach is to use just the hostname.  However, it is likely desirable to match on a subdomain (e.g, matching "m.facebook.com" if there is an item with "facebook.com") but requires careful forethought (_e.g._, "myfacebook.com" must not match "facebook.com:) since the searches occur against cryptographic hashes.  Further research and experimentation is needed to determine the correct approach.
+Finally, the precise value of "origins" elements is still to be determined. An initial (possibly naive) approach is to use just the hostname.  However, it is likely desirable to match on a subdomain (e.g, matching "m.facebook.com" if there is an item with "facebook.com") but requires careful forethought (_e.g._, "myfacebook.com" must not match "facebook.com:) since the searches occur against cryptographic hashes.  Further research and experimentation needed to determine the correct approach.
 
 ### Storing Derived Keys
 
