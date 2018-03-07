@@ -1,4 +1,6 @@
 language: ruby
+dist: trusty
+sudo: true
 
 script:
 - bundle exec jekyll build
@@ -6,8 +8,8 @@ script:
 
 deploy:
   - provider: s3
-    access_key_id: $AWS_ACCESS_KEY
-    secret_access_key: $AWS_SECRET_KEY
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
     bucket: $AWS_BUCKET
     local_dir: ./_site
     skip_cleanup: true
@@ -15,6 +17,9 @@ deploy:
       branch: master
       condition: (-n "${AWS_ACCESS_KEY_ID}") && (-n "${AWS_SECRET_ACCESS_KEY}") && (-n "${AWS_BUCKET}")
 
+after_deploy:
+  - pip install awscli
+  - ./_utils/invalidate-cloudfront-cache.sh
 
 env:
   global:
