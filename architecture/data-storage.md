@@ -6,23 +6,26 @@ Lockbox manages sensitive user data; to start will be web logins, but eventually
 
 This approach does not assume the user will -- or can -- use device-wide data protection methods (_e.g._, BitLocker, FileVault2).  Such technology is not universally available, and where it is available is not automatically enabled.
 
-## Goals
+## Themes
 
-- Protect user data -- both locally on disk and in remote storage -- using commonly-available technologies
+- User data is kept in a protected as much as possible
+- Re-use commonly available technologies to protect user data, both locally on disk and in remote storage
 - Allow for future expansion while mitigating wholesale changes to how that data is stored
 - Allow incremental updates to user's data, and eventually incremental user-driven exposure of data (_e.g._, sharing with a team/family)
 
 ## Item Data Format
 
- ![Lockbox Item JSON format](images/data-storage-item-data-format.png)
+The cleartext data format is JSON, and fits into the illustrated schema.
 
-The data format is JSON, and fits into the illustrated schema.
+ ![Lockbox Item JSON format](images/data-storage-item-data-format.png)
 
 An item is an Object, that is divided into three portions:
 
 - Top-level metadata
 - Content-submitted entry data
 - Item history data
+
+The data storage module does not maintain a cache of the cleartext values.  Each read operation (listing, retrieving) and removing includes a decrypt step; adding involves an encrypt step; updating includes decrypt and encrypt steps.  Consumers of the data storage module (_e.g._, desktop extension, iOS mobile app) **MAY** have a cleartext cache of some or all lockbox Items in order to operate.
 
 ### Metadata
 
