@@ -95,7 +95,7 @@ The FxA token endpoint validates the request parameters, and (upon success) retu
 
 ### State Values ###
 
-The `state` value is generated randomly for each authorization attempt; it is 32 bytes of cryptographically random data and encoded as "BAS64URL".
+The `state` value is generated randomly for each authorization attempt; it is 32 bytes of cryptographically random data and encoded as [BASE64URL][BASE64URL].
 
 The client includes the `state` in the authorization request, and the FxA authorization endpoint includes it in the redirected authorization response.
 
