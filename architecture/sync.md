@@ -457,7 +457,7 @@ The following indexes are removed:
 
 
 [data storage]: ./data-storage.md
-[Dexie]: https://dexie.org/
+[Dexie]: http://dexie.org/
 [ETag]: https://en.wikipedia.org/wiki/HTTP_ETag
 [FxA]: ./fxa.md
 [IndexedDB]: https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API
