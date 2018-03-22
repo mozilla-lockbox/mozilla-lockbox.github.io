@@ -31,14 +31,14 @@ The data storage module does not maintain a cache of the cleartext values.  Each
 
 The top-level metadata is everything about the item that does not typically need to be filled into a form.  It consists of the following:
 
-- **`id` (string)**: This member is a UUID that uniquely identifies the item, and** SHOULD** be a type-4 (random) UUID.
+- **`id` (string)**: This member is a UUID that uniquely identifies the item, and **SHOULD** be a type-4 (random) UUID.
 - **`disabled` (boolean)**: This member indicates whether or not the item is disabled.  Disabled items **SHOULD NOT** be used to fill forms.
 - **`title` (string)**: This member is a user-entered title or name for the item.  It can default to the origin/domain the item's entry data was created for.
 - **`tags` (string[])**: This member is an array of user-defined tags.  This member may be empty or omitted entirely.
 - **`origins` (string[])**: This member is an array of URIs this item can be applied to.  Typically an item has at most one origin, but advanced users can add additional origins if they are confident each is logically for the same owner.
 - **`created` (date/time)**: This member timestamps when the item was created.
 - **`modified` (date/time)**: This member timestamps when the item was last changed.  This includes **any** change to the item, be it entry data or metadata; the only exception is if the `last_used` member is changed.
-- **"last_used" (date/time)**: This member timestamps when the item was last accessed to fill a form.
+- **`last_used` (date/time)**: This member timestamps when the item was last accessed to fill a form.
 
 ### Entry Data
 
