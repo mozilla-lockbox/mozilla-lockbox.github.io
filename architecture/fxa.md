@@ -103,7 +103,7 @@ The client includes the `state` in the authorization request, and the FxA author
 
 [PKCE][PKCE] provides a mechanism for public clients to integrity protect the authorization grant flow.  FxA uses PKCE in lieu of true client credentials (`client_id` and `client_secret`) for public clients.
 
-PKCE uses a unique code for each sign in attempt; a challenge is included in the authorization request and a verifier is included in the token request, with the server verifying the authorization request's challenge matches the token request's verifier
+PKCE uses a unique code for each sign in attempt; a challenge is included in the authorization request and a verifier is included in the token request, with the server verifying the authorization request's challenge matches the token request's verifier.
 
 The PKCE proof is initiated as part of the authorization request as follows:
 

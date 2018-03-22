@@ -33,7 +33,7 @@ The following terms are also used:
 
 The remote storage is managed via a [Kinto] server instance.  Kinto is essentially a RESTful key/value record store, with records managed with a collection, and a collection managed within a bucket.  Buckets and collections can also have application-specific metadata associated with them.  It can provide a per-user default bucket (referred to as "default").
 
-Authentication and authorization to Kinto is performed using [Firefox Accounts][fxa] and [OAUTH] bearer tokens, with at least the following scopes:
+Authentication and authorization to Kinto is performed using [Firefox Accounts][fxa] and [OAuth] bearer tokens, with at least the following scopes:
 
 * `profile` - Access to the user's profile information, especially their user identifier (uid).
 * `https://identity.firefox.com/apps/lockbox` - The Lockbox application feature.
