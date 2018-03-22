@@ -40,7 +40,7 @@ The authorization portion starts by sending an HTTPS `GET` request to the FxA au
   - `profile` to obtain information about the user
   - `openid` to obtain an `id_token` for the user
   - `https://identity.mozilla.org/apps/lockbox` to obtain a Lockbox application-scoped encryption key
-* `keys_jwk` - The ephemeral ECDH public key used to securely obtain application-scoped keys (see [Application Scoped Keys](#app-scoped-keys))
+* `keys_jwk` - The ephemeral ECDH public key used to securely obtain application-scoped keys (see [Application Scoped Keys](#application-scoped-keys))
 * `state` - A randomly generated state value used to verify the authorization response (see [State Values](#state-values))
 * `code_challenge` - The [PKCE][PKCE] code challenge for this sign in attempt (see [PKCE Details](#pkce-details))
 * `code_challenge_method` (**== `S256`**) - The PKCE code challenge method, which is always `S256`

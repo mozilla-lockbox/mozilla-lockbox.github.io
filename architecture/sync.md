@@ -432,7 +432,7 @@ The following telemetry event is used to record sync interactions.
 - Single "sync" event, on completion of the [process](#sync-process), with the following extra properties:
 
     - `fxa_uid` [**string**] - The FxA user identifier.
-    - `error` [**string**] - The [failure reason](#errors), or `null` if sync was successful.
+    - `error` [**string**] - The [failure reason](#sync-errors), or `null` if sync was successful.
 
 ## Schema Changes
 
