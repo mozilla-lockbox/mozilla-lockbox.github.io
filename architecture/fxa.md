@@ -157,7 +157,7 @@ The client decrypts this JWE using its **private** ECDH key, and parses the resu
 
 ### Token Notes ###
 
-FxA access tokens are valid for 1209600 seconds (two weeks) by default, and can be revoked; FxA refresh tokens never expire and can be revoked.  One more more of these tokens are revoked when:
+FxA access tokens are valid for 1209600 seconds (two weeks) by default, and can be revoked; FxA refresh tokens never expire and can be revoked.  One or more of these tokens are revoked when:
 
 * The user changes their password
 * The user resets their account (forgotten password) 
@@ -188,7 +188,7 @@ The Lockbox extension uses the async method `browser.identity.launchWebAuthFlow(
 
 ### Initial State ###
 
-The a user first installs Lockbox, the datastore is initialized using a default master key.  If access to secure device storage is available, a random master key is generated and stored there.
+When the user first installs Lockbox, the datastore is initialized using a default master key.  If access to secure device storage is available, a random master key is generated and stored there.
 
 This allows a user to make use of Lockbox, retrieving/adding/updating/deleting entries.  However, none of this data is sent to remote cloud storage.
 
