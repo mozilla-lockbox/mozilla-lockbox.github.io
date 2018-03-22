@@ -124,7 +124,7 @@ Once the client has obtained the authorization code, the PKCE proof is verified 
 
 Application scoped keys is an upcoming feature in FxA.  The keys are derived from the user's credentials, are only known by the FxA web content (**_not_** the FxA server(s)) and the user, and are specific to the application(s) provisioned.  The user's credentials cannot be reversed from the derived key.
 
-The application scoped keys are represented in a bundle as a JSON object; each member of the bundle is the scope and the value is the JSON [JWK][JWK] of the symmetric encryption key:
+The application scoped keys are represented in a bundle as a JSON object; each member of the bundle is the scope and the value is the [JWK][JWK] of the symmetric encryption key:
 
 ```javascript
 {
