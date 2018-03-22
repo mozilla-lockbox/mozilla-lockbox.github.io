@@ -42,7 +42,7 @@ The top-level metadata is everything about the item that does not typically need
 
 ### Entry Data
 
-The entry data is an Object that contains a type specification and the values needed to populate forms. The specifics of this JSON object are determined by the "type" member.
+The entry data is an Object that contains a type specification and the values needed to populate forms. The specifics of this JSON object are determined by the "kind" member.
 
 - **`kind` (string)**: This member indicates the kind of entry data contained.  Currently the only value defined is "login".
 - **`notes` (string)**: This member is a catch-all of information the user can set additional information about the item (_e.g._, security questions/answers).
