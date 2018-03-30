@@ -5,3 +5,4 @@ s3_bucket: <%= ENV['AWS_BUCKET'] %>
 s3_endpoint: <%= ENV['AWS_REGION'] %>
 cloudfront_distribution_id: <%= ENV['AWS_DISTRIBUTION_ID'] %>
 cloudfront_wildcard_invalidation: true
+cloudfront_invalidate_root: true
