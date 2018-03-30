@@ -19,7 +19,7 @@ existing Firefox users relying on the “saved logins” feature.
 All planning and work performed is reflected on our Waffle.io kanban board:  
 [https://waffle.io/mozilla-lockbox/lockbox-extension](https://waffle.io/mozilla-lockbox/lockbox-extension)
 
-Learn more about the Lockbox [project processes](/process).
+Learn more about the Lockbox [project processes](/process.md).
 
 ## Product Components
 
