@@ -5,181 +5,89 @@ title: Project Process
 
 # Lockbox Project Processes
 
-**Goal:** to capture the current flow of research, product design and development, and test and release management, primarily in context of the Lockbox browser extension. Once agreed on the draft process, it can serve as our model to change and improve. This is not meant to be exhaustive nor required necessarily, everything is subject to change in the spirit of agile and timeline-driven development.
+**Goal:** to capture the current flow of research, product design and development, and test and release management. This is not meant to be exhaustive nor required necessarily, everything is subject to change in the spirit of agile and timeline-driven development.
 
-<!-- TOC depthFrom:3 depthTo:3 withLinks:1 updateOnSave:1 orderedList:0 -->
+<!-- TOC depthFrom:2 depthTo:4 withLinks:1 updateOnSave:1 orderedList:0 -->
 
-- [Research, Product and UX Stories](#research-product-and-ux-stories)
-- [Sprint and Development Planning (2 weeks)](#sprint-and-development-planning-2-weeks)
-- [Development, Testing and Release Process](#development-testing-and-release-process)
+- [User Story Creation](#user-story-creation)
+- [Feasibility and Final Designs](#feasibility-and-final-designs)
+- [Planning and Engineering](#planning-and-engineering)
+	- [Development process overview](#development-process-overview)
+	- [Agile process details](#agile-process-details)
+		- [Waffle-based Kanban](#waffle-based-kanban)
+		- [Estimation translation](#estimation-translation)
+		- [GitHub labels](#github-labels)
 
 <!-- /TOC -->
 
-### Research, Product and UX Stories
+---
 
-**Overview:** Our intention is to lead the the Lockbox development process with research and user-oriented questions: what do we want or need to learn to achieve our product, business and user goals? These questions or goals or features or experiments ultimately result in a GitHub issue filed in the appropriate repository (lockbox-extension for the Firefox extension, lockbox-ios for the iOS app).
+[![process](https://user-images.githubusercontent.com/49511/39437595-8d319a94-4c5e-11e8-9b63-bd511a3d6e70.png)](https://user-images.githubusercontent.com/49511/39437595-8d319a94-4c5e-11e8-9b63-bd511a3d6e70.png)
+(click to see full size image)
 
-_Note: first search for existing / related issues, so as to not create duplicates and maintain history._
+## User Story Creation
 
-* In GitHub (not Bugzilla), anyone can create a new (or edit an existing) issue
+Our intention is to lead the the Lockbox development process with research and user-oriented questions: what do we want or need to learn to achieve our product, business and user goals?
 
-    * Set a meaningful title (no worries, anyone can change it later)
+These questions or goals or features or experiments ultimately result in a GitHub issue ("user story") filed in the appropriate repository (e.g.: lockbox-extension for the browser extension, lockbox-ios for the iOS app).
 
-    * Provide user and product context, requirements, and designs in the description
+The flow of a user story could roughly follow this flow:
 
-    * Apply the 'feature' and 'backlog' labels in GitHub
+- PM authors user story and provides acceptance criteria
+- UX creates lo-fidelity designs to be reviewed by product team
+- UX incorporates feedback
+- user story is ready for engineering feasibility
 
-        * If the work becomes too big for one issue, this will become an 'epic' and separate issues will be created for the work to be prioritized
+## Feasibility and Final Designs
 
-* Apply the 'need-research' label for all features that need input from user research
+With a user story — including acceptance criteria and designs — there is opportunity for review and revisions:
 
-    * For example, "password management" may originate from engineering and product requirements and after built, require research to learn if what was built is better/faster than an alternative
+- engineering reviews the story for feasibility, clarifying questions
+- UX makes revisions
+- UX creates final designs and assets
+- final reviews and revisions completed
 
-    * Note: there may be separate 'need-research' issues / checklists created as well for innovative or generative exploration. For example, "password generation" may start with user research studies in order to then inform and update the issue description with requirements, recommendations, designs
+## Planning and Engineering
 
-* Some issues may be created and require design ('need-ux')
+Once a user story is confirmed "ready" for engineering to implement (has final designs and approvals), it needs to be prioritized, estimated and scheduled. 
 
-    * Once the prerequisites are completed (research explored, design created, user voice added, acceptance criteria defined, content created, etc.) and the issue is updated with the requirements, then it's ready to move from the Backlog to the "To Do" list for engineering to be assigned and implement the work
-
-    * Some issues are minor, self-contained and will be created and go straight to "Backlog" for prioritization and "To Do" without the UR or UX team involved
-
-![issue-creation-approach](https://user-images.githubusercontent.com/49511/32564064-3dbdfc62-c470-11e7-8648-ad088c1fa511.png)
-
-
-### Sprint and Development Planning (2 weeks)
-
-**Overview:** Once a feature is confirmed ready to build (see process above), it needs to be prioritized, potentially discussed, and then estimated and scheduled for implementation. Some issues will be created outside of the above process and jump straight into this flow. This is how we, as a core team, agree what our two-week plan is.
-
+Some issues will be created outside of the above process and jump straight into this flow...
 
 **All issues are automatically reflected on our Waffle.io kanban board used for our planning: [https://waffle.io/mozilla-lockbox/lockbox-extension](https://waffle.io/mozilla-lockbox/lockbox-extension)**
 
-![kanban-board-flow](https://user-images.githubusercontent.com/49511/32564066-3de1ba62-c470-11e7-99e9-d347c6ce8548.png)
-
-As a group, during our planning sessions, we...
+As a group, during our sprint review and backlog grooming sessions, we...
 
 * Review all **"Done"** items from the sprint and archive the cards
 
-    * This allows the PI and Analytics team to passively double check everything they're expecting has been tested or tracked (or may flag the need for a follow-up discussion or issue for work to be completed).
-
-    * This also allows the entire team including product, research, and engineering to understand and celebrate the work complete from the past sprint.
+    * This allows review of what's been completed from a user perspective (demo).
+    
+    * This may flag the need for a follow-up discussion or issue for work to be completed.
 
 * Review all **"In Progress"** items and see where they are at
 
     * Did they not make it into the milestone as expected?
 
     * Are there open items, blockers?
+    
+    * Should these items go back into the backlog for re-prioritization and planning?
 
-Once we're clear on what's done and what's remaining from the sprint…
+*Once we're clear on what's done and what's remaining from the sprint…*
 
-* Triage all the issues in the **"Inbox"**
+* Triage items in the **"Inbox"** and advocate for any new work to be considered
 
     * "Inbox" will include all newly created issues across all repositories
 
-    * It will also include external contributions (PRs) and issues created
-
-        * responsibility to respond to external contributors?
-
-        * decide: voice, how much planning/detail is shared, etc.?
-
     * If we haven't already, apply the proper labels (type of work, at the very least)
 
-    * Agree as a team to
-
-        * "Close" with an explanation and resolution
-
-        * "leave in Inbox to review later" if no immediate decision
-
-        * "move to "Backlog" if understood, labeled, ready for prioritizing (may still need details finalized, but agreed we want to do it)
+    * Move to "Backlog" if understood, labeled, ready for prioritizing (may still need details finalized, but agreed we want to do it)
 
 * Review all items in the **"Backlog"** and decide if any should be promoted to work on
 
-    * An effort estimate should be applied so we know how big the work is
+    * An effort estimate can be applied so we know how big the work is
 
     * Some open questions may remain at this point but can be answered as we go
 
-* Review all **"To Do"** items and prioritize
-
-    * Anything moved from "Backlog" to "To Do" is assumed part of the milestone
-
-    * Has anything we already prioritized become more or less important to do?
-
-    * Do we know who is working on what? What blockers or questions remain? Follow up conversations or details needed to get started?
-
-#### Use of Waffle.io kanban board columns
-
-* **Inbox:** Everything starts here and pops onto the top of the stack including external contributor PRs. Items we've agreed are to be done get labeled and moved to the Backlog.
-
-* **Backlog:** Once agreed we have what we need to work on (requirements, designs, answers) we move Backlog items to "To Do" and provide an "effort" estimate.
-
-* **To Do:** We work on items from the top and down the stack. Milestones are applied to make sure we know what we aim to ship in the two-week cycle.
-
-* **In Progress:** Work has started and typically a Pull Request has been created that "fixes the issue, linking the two items together. PI and testing review happen here.
-
-* **Done:** Once the issue is closed (and PR) then the cards automatically move into this Done column which can be reviewed every two weeks for what was accomplished.
-
-##### Use of Waffle.io estimations (added at Backlog, or To Do):
-
-* **1** = hours
-
-* **3** = day
-
-* **5** = 2-3 days
-
-* beyond that is too big.. make it an epic or break it down perhaps?
-
-#### Organizing and using GitHub labels
-
-##### Issue Types
-
-* epic: organize multiple issues, no work done here, closed by product and PI
-
-* bug: something doesn't work as expected
-
-* feature (enhancements): something new to build, design, test
-
-* chore (dev env, docs, etc.): other project related work
-
-* TxP: Test Pilot specific planning todos, from them or for them
-
-##### Closed Issue Resolutions
-
-* closed-wontfix: not something we will address and not worth keeping open
-
-* closed-invalid: not an actual issue as described or applicable here
-
-* closed-duplicate: addressed elsewhere
-
-    * also add "Duplicate of #" in GitHub issue comment to link issue
-
-* pi-verified: applied by PI team after an item has been tested, documented, reviewed
-
-##### Open Questions or Help Needed
-
-* needs-ux: need design or prototype or decision from UX/UI team
-
-* needs-research: help inform approach, test/validate something
-
-* needs-pi: need input on design or confirmation, immediate or special attention needed
-
-* needs-eng: need input or details from eng team before development (in planning)
-
-* question: generally needs to be discussed and defined as a group, decision missing
-
-##### Use of GitHub milestones
-
-* Apply Milestone once moved from "Backlog" to "To Do"
-
-* "To Do" implies we will do it within the current/next milestone
-
-* Semver describes numbering scheme (0.1.1-alpha, 0.1.3-alpha2)
-
-##### Defining priorities (TBD)
-
-- p1-must-have
-- p2
-- p3
-
-### Development, Testing and Release Process
+### Development process overview
 
 * "Take" an issue by assigning it to yourself if not obvious and consider moving it to "In Progress"
 
@@ -191,28 +99,75 @@ Once we're clear on what's done and what's remaining from the sprint…
 
     * Add "WIP" to the PR title if pushing up but not complete nor ready for review
 
-* Request code review from code owner(s) and PI team
+* Request review from code owner(s), product, PI (as necessary)
 
     * Code owners are defined in `docs/` and automatically applied at PR creation
-
-    * PI monitors all opened items and uses "pi-verified" to confirm item has been reviewed or captured in tests, depending on what applies after-the-fact
-
-    * The "pi-needed" label is applied if input from PI is needed or special attention before merging the feature
 
     * Code coverage must meet the guidelines or an exception must be explained
 
     * All other required commit statuses must pass (for example: CI tests), if any tests are broken it's the PR creator's responsibility to determine why and resolve it
 
-* Code freeze / "pencils down" at the end of the Thursday before end of sprint for PI end-to-end testing
+  * Design review may result in changes to the PR or follow-up tasks to address the debt
 
-    * Product and engineering collaborate on the release notes throughout the cycle
 
-    * Friday morning: PI reviews a Pull Request that includes all items on "master" branch against "production" branch
+### Agile process details
 
-        * Master is assumed to be deploy-able, production is actually live and available for download / update to users
+#### Waffle-based Kanban
 
-    * Friday: Once approved by PI and end-to-end tests passed, Pull Request to "production" is ready to merge on Monday
+* **Inbox:** Everything starts here and pops onto the top of the stack. Items we've agreed are to be done get labeled and moved to the Backlog.
 
-        * After PI has passed, any additions/merges to master *may not* get deployed to production as part of this release. Exceptions must be approved by the engineering, PI, and product teams.
+* **Blocked:** Items that "need-" something or someone: a decision, an updated design, input on feasibility. Not yet ready for prioritization or work.
 
-    * Monday morning: release engineer merges the master-to-production PR and follows remainder of the release instructions
+* **Backlog:** Items we've agreed we have everything we need to begin engineering work (requirements, designs, answers).
+
+* **In Progress:** Work has started and typically a Pull Request has been created that "fixes issue #", linking the two items together. Testing, UX and code reviews happen here.
+
+* **Done:** Once the issue (and PR) is closed, then the cards automatically move into this Done column. They're archived after sprint review.
+
+#### Estimation translation
+
+* `1` = hours
+
+* `3` = day
+
+* `5` = 2-3 days
+
+...beyond that is too big.. make it an epic or break it down perhaps?
+
+#### GitHub labels
+
+**Priorities**
+
+- `P1`: must have
+- `P2`: nice to have
+- `P3`: future consideration
+
+**Issue Types**
+
+* `bug`: something doesn't work as expected
+
+* `feature` (enhancements): something new to build, design, test
+
+* `chore` (dev env, docs, etc.): other project related work
+
+**Closed Issue Resolutions**
+
+* `closed-duplicate`: addressed elsewhere
+
+* `closed-invalid`: not an actual issue as described or applicable here
+
+* `closed-wontfix`: not something we will address and not worth keeping open
+
+**Open Questions or Help Needed**
+
+* `needs-content`: final copy or text or decision needed before implementation
+
+* `needs-design`: need new design or updates, assets
+
+* `needs-eng`: need input or details from eng team before development, may be blocked on a pre-requisite task
+
+* `needs-product`: decision or prioritization or input needed from PM
+
+* `needs-research`: help inform approach, test/validate something
+
+* `needs-tasks`: design and acceptance is provided, but more breakdown into work or tasks needed
