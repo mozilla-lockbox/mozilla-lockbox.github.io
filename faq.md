@@ -3,46 +3,26 @@ layout: page
 title: FAQ
 ---
 
-## Question 1
+## What is Lockbox?
 
 Answer goes here
 
-## Question 2
+## How do I use Lockbox?
 
 Answer goes here
 
-## Question 3
+## How do I enable sync on Firefox?
 
 Answer goes here
 
-## Question 4
+## How do I create new entries?
 
 Answer goes here
 
-## Question 5
+## How do I edit existing entries?
 
 Answer goes here
 
-## Question 6
-
-Answer goes here
-
-## Question 7
-
-Answer goes here
-
-## Question 8
-
-Answer goes here
-
-## Question 9
-
-Answer goes here
-
-## Question 10
-
-Answer goes here
-
-## Question 11
+## What security technology does Lockbox use?
 
 Answer goes here
