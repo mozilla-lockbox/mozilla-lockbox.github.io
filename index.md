@@ -3,14 +3,6 @@ layout: page
 title: Firefox Lockbox
 ---
 
-<div class="callout-box">
-  <h4>Lockbox for Desktop</h4>
-  <p>A simple stand-alone password manager you can secure with your
-     Firefox Account.</p>
-  <a href="https://mozilla-lockbox.github.io/lockbox-extension/"
-     class="button-link">Get Lockbox</a>
-</div>
-
 This website is to gather documentation and details for Mozilla's experimental
 product: [Firefox Lockbox][website]. Firefox Lockbox will be the framework for
 us to test and quickly iterate on hypotheses (on desktop and mobile).
