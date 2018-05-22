@@ -8,7 +8,7 @@ product: [Firefox Lockbox][website]. Firefox Lockbox will be the framework for
 us to test and quickly iterate on hypotheses (on desktop and mobile).
 
 All planning and work performed is reflected on our Waffle.io kanban board:  
-[https://waffle.io/mozilla-lockbox/lockbox-extension](https://waffle.io/mozilla-lockbox/lockbox-extension)
+[https://waffle.io/mozilla-lockbox/lockbox-extension][waffle]
 
 Learn more about the Lockbox [project processes](/process.md).
 
@@ -30,6 +30,7 @@ Component                           | Documentation                       | Stat
 ---
 
 [website]: https://mozilla-lockbox.github.io/
+[waffle]: https://waffle.io/mozilla-lockbox/lockbox-extension
 [datastore-repo]: https://github.com/mozilla-lockbox/lockbox-datastore
 [datastore-docs]: https://mozilla-lockbox.github.io/lockbox-datastore/
 [datastore-travis-image]: https://travis-ci.org/mozilla-lockbox/lockbox-datastore.svg?branch=master
