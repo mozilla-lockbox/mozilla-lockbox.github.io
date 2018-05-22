@@ -2,6 +2,10 @@
 ---
 @import "minima";
 
+body {
+  font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+}
+
 table th {
   border-bottom: 1px solid #efefef;
   text-align: left;
