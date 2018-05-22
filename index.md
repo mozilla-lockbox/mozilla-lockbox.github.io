@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Lockbox
+title: Firefox Lockbox
 ---
 
 <div class="callout-box">
@@ -12,9 +12,8 @@ title: Lockbox
 </div>
 
 This website is to gather documentation and details for Mozilla's experimental
-[Lockbox product][website]. Lockbox will be the framework for us to test and
-quickly iterate on hypotheses (on desktop and mobile) without disrupting
-existing Firefox users relying on the “saved logins” feature.
+product: [Firefox Lockbox][website]. Firefox Lockbox will be the framework for
+us to test and quickly iterate on hypotheses (on desktop and mobile).
 
 All planning and work performed is reflected on our Waffle.io kanban board:  
 [https://waffle.io/mozilla-lockbox/lockbox-extension](https://waffle.io/mozilla-lockbox/lockbox-extension)
