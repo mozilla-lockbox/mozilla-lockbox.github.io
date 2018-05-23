@@ -3,11 +3,11 @@ layout: page
 title: FAQ
 ---
 
-## What is Lockbox?
+## What is Firefox Lockbox?
 
 Firefox Lockbox is an experimental product from Mozilla, the makers of Firefox.  It’s a tool that allows you to access saved passwords from your mobile phone.  Right now, it’s available for iPhone, and we hope to make it available on Android soon.  
 
-## How do I use Lockbox?
+## How do I use Firefox Lockbox?
 
 Firefox Lockbox works by syncing passwords between the Firefox browser and the Firefox Lockbox app. To get started, sign in to your account on Firefox for desktop or mobile and begin saving your logins to Firefox when prompted.  You’ll need to save at least one login to Firefox to see your entries in Firefox Lockbox.  
 
@@ -33,6 +33,6 @@ You’ll need to edit entries in Firefox.  To do this in Firefox for desktop, go
 
 To edit entries on Firefox for iOS, go to settings and select the Logins menu under the Privacy section.
 
-## What security technology does Lockbox use?
+## What security technology does Firefox Lockbox use?
 
 When you protect Firefox Lockbox with a Firefox Account, Firefox Lockbox uses [AES256-GCM](https://en.wikipedia.org/wiki/Galois/Counter_Mode) encryption, a tamper-resistant block cipher technology, to protect your data.
