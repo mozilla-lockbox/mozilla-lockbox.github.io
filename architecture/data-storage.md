@@ -1,4 +1,7 @@
-# Lockbox Data Storage
+---
+layout: page
+title: Lockbox Data Storage
+---
 
 ## Overview
 
