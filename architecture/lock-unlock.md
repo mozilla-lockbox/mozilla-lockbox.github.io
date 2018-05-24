@@ -1,6 +1,7 @@
-# Locking/Unlocking
-
-## Summary
+---
+layout: page
+title: Locking/Unlocking
+---
 
 This document summarizes our goals for locking/unlocking the Lockbox
 datastore. While unlocking should always be the result of some explicit user

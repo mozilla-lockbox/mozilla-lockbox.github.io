@@ -3,8 +3,6 @@ layout: page
 title: Cloud-based Sync and Backup
 ---
 
-# Cloud-based Sync and Backup
-
 Cloud-based synchronization can provide a user reliable access to their logins.  Building off the encrypt-always nature of [data storage] extends the secure protection of the user's data across their devices in a consistent manner.
 
 ## Core Technologies

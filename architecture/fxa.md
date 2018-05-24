@@ -3,8 +3,6 @@ layout: page
 title: Integration with Firefox Accounts
 ---
 
-# Integration with Firefox Accounts #
-
 Integration with Firefox Accounts (FxA) uses [OAuth](https://oauth.net/); Lockbox applications (Web Extension and mobile) are OAuth public clients and FxA is the authorization service.  It also functions as the user profile service where that information is needed.
 
 ## OAuth Protocol Highlights ##

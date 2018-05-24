@@ -3,8 +3,6 @@ layout: page
 title: Project Process
 ---
 
-# Lockbox Project Processes
-
 **Goal:** to capture the current flow of research, product design and development, and test and release management. This is not meant to be exhaustive nor required necessarily, everything is subject to change in the spirit of agile and timeline-driven development.
 
 <!-- TOC depthFrom:2 depthTo:4 withLinks:1 updateOnSave:1 orderedList:0 -->
