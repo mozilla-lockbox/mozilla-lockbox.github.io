@@ -9,6 +9,7 @@ plugins:
   - jekyll-seo-tag
 
 header_pages:
+  - faq.md
   - process.md
   - architecture/index.md
 
