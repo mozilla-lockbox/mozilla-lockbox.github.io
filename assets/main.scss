@@ -116,8 +116,9 @@ li {
   float: left;
 }
 
-.svg-icon {
-  vertical-align: middle;
+.icon-mail {
+  width: 16px;
+  height: 12px;
 }
 
 .post-content > h2:first-child {
@@ -147,6 +148,16 @@ div.callout-box {
   text-align: center;
 }
 
+.image-grid {
+  img {
+    margin: 0 0 1.5rem;
+    width: 90%;
+  }
+}
+
+img {
+  max-width: 100%;
+}
 
 // footer
 .footer-col:last-child {
@@ -154,6 +165,11 @@ div.callout-box {
 }
 
 .site-footer {
+  .icon {
+    fill: #828282;
+    padding-right: 4px;
+  }
+
   .contact-list,
   .social-media-list {
     margin: 0;
@@ -204,6 +220,24 @@ div.callout-box {
 @media screen and (min-width: 600px) {
   .footer-col-2 {
     text-align: right;
+  }
+
+  .image-grid {
+    img {
+      margin: 0 0 3rem;
+      width: auto;
+    }
+  }
+
+  .image-grid:not(.full) {
+    img {
+      display: inline-block;
+      width: 46%;
+
+      &:first-child {
+        margin-right: 4%;
+      }
+    }
   }
 }
 
