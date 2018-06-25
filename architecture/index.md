@@ -24,7 +24,7 @@ Component                           | Documentation                       | Stat
 This is not exhaustive nor a guarantee of any future plans but meant as a
 helpful reference.
 
-[website]: https://mozilla-lockbox.github.io/
+[website]: https://lockbox.firefox.com/
 
 [datastore-repo]: https://github.com/mozilla-lockbox/lockbox-datastore
 [datastore-docs]: https://mozilla-lockbox.github.io/lockbox-datastore/
