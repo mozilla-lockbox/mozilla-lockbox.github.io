@@ -1,5 +1,9 @@
 #! /usr/bin/env bash
 
-bundle install
+if [[ ! (-a Gemfile.lock) ]]; then
+    bundle install
+else
+    bundle update
+fi
 
 bundle exec "$@"
