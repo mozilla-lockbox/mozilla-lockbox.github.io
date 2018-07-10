@@ -59,6 +59,12 @@ You’ll need to edit entries in Firefox.  To do this in Firefox for desktop, go
 To edit entries on Firefox for iOS, go to settings and select the Logins menu under the Privacy section.
 
 <a id="what-security-technology-does-firefox-lockbox-use">
-### What security technology does Firefox Lockbox use?
+### What security technologies does Firefox Lockbox use?
 
-When you protect Firefox Lockbox with a Firefox Account, Firefox Lockbox uses [AES256-GCM](https://en.wikipedia.org/wiki/Galois/Counter_Mode) encryption, a tamper-resistant block cipher technology, to protect your data.
+Firefox Lockbox uses the following technologies to protect your data:
+
+* [AES-256-GCM](https://en.wikipedia.org/wiki/Galois/Counter_Mode) encryption, a tamper-resistant block cipher technology.
+* [onepw](https://github.com/mozilla/fxa-auth-server/wiki/onepw-protocol) protocol to sign into Firefox Accounts and obtain encryption keys.
+* [PBKDF2](https://en.wikipedia.org/wiki/PBKDF2) and [HKDF](https://en.wikipedia.org/wiki/HKDF) with [SHA-256](https://en.wikipedia.org/wiki/SHA-2) to create the encryption key from your Firefox Accounts username and password.
+
+All of this is done on your device, so Mozilla cannot know your password and cannot read your data.
