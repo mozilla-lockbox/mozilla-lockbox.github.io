@@ -16,8 +16,8 @@ Other technical documents and resources can be found in the code repositories:
 
 Component                           | Documentation                       | Status | Coverage
 ---                                 | ---                                 | ---    | ---
-[Data Store][datastore-repo]        | [data-store][datastore-docs]        | [![Build Status][datastore-travis-image]][datastore-travis-link] | [![Coverage Status][datastore-codecov-image]][datastore-codecov-link]
-[Firefox extension][extension-repo] | [lockbox-extension][extension-docs] | [![Build Status][extension-travis-image]][extension-travis-link] |  [![Coverage Status][extension-codecov-image]][extension-codecov-link]
+[Data Store prototype][datastore-repo]        | [data-store][datastore-docs]        | [![Build Status][datastore-travis-image]][datastore-travis-link] | [![Coverage Status][datastore-codecov-image]][datastore-codecov-link]
+[Firefox extension prototype][extension-repo] | [lockbox-extension][extension-docs] | [![Build Status][extension-travis-image]][extension-travis-link] |  [![Coverage Status][extension-codecov-image]][extension-codecov-link]
 [iOS application][ios-repo]         | [lockbox-ios][ios-docs]             | [![BuddyBuild][buddybuild-image]][buddybuild-link] | [![Coverage Status][ios-codecov-image]][ios-codecov-link]
 [Android application][android-repo]         | [lockbox-android][android-docs]             | |
 [Project documentation][docs-repo]  | [mozilla-lockbox][website]
