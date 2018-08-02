@@ -19,6 +19,7 @@ Component                           | Documentation                       | Stat
 [Data Store][datastore-repo]        | [data-store][datastore-docs]        | [![Build Status][datastore-travis-image]][datastore-travis-link] | [![Coverage Status][datastore-codecov-image]][datastore-codecov-link]
 [Firefox extension][extension-repo] | [lockbox-extension][extension-docs] | [![Build Status][extension-travis-image]][extension-travis-link] |  [![Coverage Status][extension-codecov-image]][extension-codecov-link]
 [iOS application][ios-repo]         | [lockbox-ios][ios-docs]             | [![BuddyBuild][buddybuild-image]][buddybuild-link] | [![Coverage Status][ios-codecov-image]][ios-codecov-link]
+[Android application][android-repo]         | [lockbox-android][android-docs]             | |
 [Project documentation][docs-repo]  | [mozilla-lockbox][website]
 
 This is not exhaustive nor a guarantee of any future plans but meant as a
@@ -46,5 +47,8 @@ helpful reference.
 [buddybuild-link]: https://dashboard.buddybuild.com/apps/5a0ddb736e19370001034f85/build/latest?branch=master
 [ios-codecov-image]: https://img.shields.io/codecov/c/github/mozilla-lockbox/lockbox-ios.svg
 [ios-codecov-link]: https://codecov.io/gh/mozilla-lockbox/lockbox-ios
+
+[android-repo]: https://github.com/mozilla-lockbox/lockbox-android
+[android-docs]: https://mozilla-lockbox.github.io/lockbox-android/
 
 [docs-repo]: https://github.com/mozilla-lockbox/mozilla-lockbox.github.io/
