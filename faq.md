@@ -89,3 +89,26 @@ First, open the Firefox for iOS main menu to see if you are signed in. Once you 
   <img src="/assets/images/faq/manual-sync-ios.png" alt="Manual Sync on iOS" />
   <img src="/assets/images/faq/manual-sync-refresh.png" alt="Pull to Refresh in Firefox Lockbox" />
 </div>
+
+<a id="how-do-i-set-up-autofill">
+### How do I set up AutoFill?
+
+If you just downloaded Firefox Lockbox, you’ll start with a screen which includes “Set Up Autofill”, which takes you directly to your device settings.
+
+<div class="image-grid">
+  <img src="/assets/images/faq/autofill-onboarding.png" alt="AutoFill Onboarding" />
+  <img src="/assets/images/faq/autofill-settings.png" alt="Settings - AutoFill Passwords" />
+</div>
+
+Here you can select Firefox Lockbox to autofill logins for you. You also want to make sure that “AutoFill Passwords” is green and toggled on.
+
+<div class="image-grid">
+  <img src="/assets/images/faq/autofill-password-settings.png" alt="Settings - Passwords and Accounts" />
+  <img src="/assets/images/faq/autofill-signin.png" alt="Settings - Sign in Required" />
+</div>
+
+If you’re already using Firefox Lockbox, you can set Lockbox to autofill your logins by navigating through the device: Settings > Passwords & Accounts > AutoFill Passwords
+
+If you haven’t yet signed in to Lockbox, you will be prompted to do so in order to authenticate the app to automatically fill passwords.
+
+Your setup is now complete. You can now start using your saved logins in Lockbox.
