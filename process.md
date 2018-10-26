@@ -113,9 +113,9 @@ Some issues will be created outside of the above process and jump straight into 
 
     * All other required commit statuses must pass (for example: CI tests), if any tests are broken it's the PR creator's responsibility to determine why and resolve it
 
-  * Design review may result in changes to the PR or follow-up tasks to address the debt
-	
-	* **add information here about dismissing and re-requesting reviews**
+  * Design review may result in changes to the PR or follow-up tasks to be addressed later
+
+* Once the requested changes are made, you dismiss the previous reviews and re-request review (as noted above)
 
 ### Agile process details
 
