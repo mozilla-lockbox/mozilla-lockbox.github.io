@@ -53,13 +53,25 @@ Some issues will be created outside of the above process and jump straight into 
 
 **All issues are automatically reflected on our Waffle.io kanban board used for our planning: [https://waffle.io/mozilla-lockbox/lockbox-extension](https://waffle.io/mozilla-lockbox/lockbox-extension)**
 
-As a group, during our sprint review and backlog grooming sessions, we...
+*As a group, during our sprint review session, we...*
 
 * Review all **"Done"** items from the sprint and archive the cards
 
     * This allows review of what's been completed from a user perspective (demo).
     
     * This may flag the need for a follow-up discussion or issue for work to be completed.
+
+*Before the sprint planning meeting, a pre-planning meeting is held by the product (and potentially involves other product or tech leads) to prioritize:*
+
+* Triage items in the **"Inbox"** and advocate for any new work to be considered
+
+    * "Inbox" will include all newly created issues across all repositories
+
+    * If we haven't already, apply the proper labels (type of work, at the very least)
+
+    * Move to "On Deck" if understood, labeled, ready for prioritizing (may still need details finalized, but agreed we want to do it)
+
+*As a group, during our sprint planning (backloog grooming) session, we...*
 
 * Review all **"In Progress"** items and see where they are at
 
@@ -68,22 +80,18 @@ As a group, during our sprint review and backlog grooming sessions, we...
     * Are there open items, blockers?
     
     * Should these items go back into the backlog for re-prioritization and planning?
+		
+* Review all **On Deck** items and consider promoting some or all of them into the **Backlog**
 
-*Once we're clear on what's done and what's remaining from the sprint…*
+* Review all items in the **"Backlog"** and decide on this sprint's commitment:
 
-* Triage items in the **"Inbox"** and advocate for any new work to be considered
-
-    * "Inbox" will include all newly created issues across all repositories
-
-    * If we haven't already, apply the proper labels (type of work, at the very least)
-
-    * Move to "Backlog" if understood, labeled, ready for prioritizing (may still need details finalized, but agreed we want to do it)
-
-* Review all items in the **"Backlog"** and decide if any should be promoted to work on
-
-    * An effort estimate can be applied so we know how big the work is
-
-    * Some open questions may remain at this point but can be answered as we go
+		* These items are explicitly to be "committed" to for the current sprint (can be expected to be done, demo'd during the review)
+		
+		* We review the story and make sure its documented and understood so it can be committed to completing
+		
+		* Any dependencies (it depends on, or depends on something else) is reviewed and indicated
+		
+		* We also provide sizing guidance (how much work?) and see if anyone is specifically interested in working on it
 
 ### Development process overview
 
@@ -106,17 +114,18 @@ As a group, during our sprint review and backlog grooming sessions, we...
     * All other required commit statuses must pass (for example: CI tests), if any tests are broken it's the PR creator's responsibility to determine why and resolve it
 
   * Design review may result in changes to the PR or follow-up tasks to address the debt
-
+	
+	* **add information here about dismissing and re-requesting reviews**
 
 ### Agile process details
 
 #### Waffle-based Kanban
 
-* **Inbox:** Everything starts here and pops onto the top of the stack. Items we've agreed are to be done get labeled and moved to the Backlog.
+* **Inbox:** Everything starts here and pops onto the top of the stack. Items we've agreed are to be done get labeled and moved to On Deck.
 
-* **Blocked:** Items that "need-" something or someone: a decision, an updated design, input on feasibility. Not yet ready for prioritization or work.
+* **On Deck:** Items that are prioritized and considered "stretch" goals to work on during the current sprint, likely to appear in the next one.
 
-* **Backlog:** Items we've agreed we have everything we need to begin engineering work (requirements, designs, answers).
+* **Backlog:** Items we've agreed we have everything we need to begin engineering work (requirements, designs, answers) and will commit to doing during the current sprint.
 
 * **In Progress:** Work has started and typically a Pull Request has been created that "fixes issue #", linking the two items together. Testing, UX and code reviews happen here.
 
@@ -145,6 +154,8 @@ As a group, during our sprint review and backlog grooming sessions, we...
 * `bug`: something doesn't work as expected
 
 * `feature` (enhancements): something new to build, design, test
+
+* `tech-debt`: improvements we want to address that may not be user-facing
 
 * `chore` (dev env, docs, etc.): other project related work
 
