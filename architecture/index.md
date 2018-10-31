@@ -19,7 +19,7 @@ Component                           | Documentation                       | Stat
 [Data Store prototype][datastore-repo]        | [data-store][datastore-docs]        | [![Build Status][datastore-travis-image]][datastore-travis-link] | [![Coverage Status][datastore-codecov-image]][datastore-codecov-link]
 [Firefox extension prototype][extension-repo] | [lockbox-extension][extension-docs] | [![Build Status][extension-travis-image]][extension-travis-link] |  [![Coverage Status][extension-codecov-image]][extension-codecov-link]
 [iOS application][ios-repo]         | [lockbox-ios][ios-docs]             | [![BuddyBuild][buddybuild-image]][buddybuild-link] | [![Coverage Status][ios-codecov-image]][ios-codecov-link]
-[Android application][android-repo]         | [lockbox-android][android-docs]             | [![Build Status][bitrise-image]][bitrise-link] | [![codecov][codecov-image]][codecov-link]
+[Android application][android-repo]         | [lockbox-android][android-docs]             | |
 [Project documentation][docs-repo]  | [mozilla-lockbox][website]
 
 This is not exhaustive nor a guarantee of any future plans but meant as a
@@ -50,10 +50,5 @@ helpful reference.
 
 [android-repo]: https://github.com/mozilla-lockbox/lockbox-android
 [android-docs]: https://mozilla-lockbox.github.io/lockbox-android/
-[bitrise-image]: https://app.bitrise.io/app/20089a88380dd14d/status.svg?token=41PRDjKSm0fQCUiS2EmCkQ&branch=master
-[bitrise-link]: https://app.bitrise.io/app/20089a88380dd14d
-[codecov-image]: https://codecov.io/gh/mozilla-lockbox/lockbox-android/branch/master/graph/badge.svg 
-[codecov-link]: https://codecov.io/gh/mozilla-lockbox/lockbox-android 
-
 
 [docs-repo]: https://github.com/mozilla-lockbox/mozilla-lockbox.github.io/
