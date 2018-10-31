@@ -85,13 +85,13 @@ Some issues will be created outside of the above process and jump straight into 
 
 * Review all items in the **"Backlog"** and decide on this sprint's commitment:
 
-		* These items are explicitly to be "committed" to for the current sprint (can be expected to be done, demo'd during the review)
+    * These items are explicitly to be "committed" to for the current sprint (can be expected to be done, demo'd during the review)
 		
-		* We review the story and make sure its documented and understood so it can be committed to completing
+    * We review the story and make sure its documented and understood so it can be committed to completing
 		
-		* Any dependencies (it depends on, or depends on something else) is reviewed and indicated
+    * Any dependencies (it depends on, or depends on something else) is reviewed and indicated
 		
-		* We also provide sizing guidance (how much work?) and see if anyone is specifically interested in working on it
+    * We also provide sizing guidance (how much work?) and see if anyone is specifically interested in working on it
 
 ### Development process overview
 
