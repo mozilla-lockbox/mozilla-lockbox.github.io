@@ -5,7 +5,7 @@ title: FAQ
 
 ### What is Firefox Lockbox?
 
-Firefox Lockbox is an experimental product from Mozilla, the makers of Firefox. It’s an app for iPhone (and coming soon for Android) that gives you access to passwords you’ve saved to Firefox.  
+Firefox Lockbox is an experimental product from Mozilla, the makers of Firefox. It’s an app for iPhone ([sign up to be notified when the Android app is available]((https://goo.gl/forms/ZwLIfHSGLrYcM6k83)) that gives you access to passwords you’ve saved to Firefox.  
 
 <a id="how-do-i-use-firefox-lockbox">
 ### How do I get my saved logins into Firefox Lockbox?
@@ -46,6 +46,10 @@ Once you are signed in to your account, you can select “Sync Now” to send yo
   <img src="/assets/images/faq/sync-ios-4.png" alt="Enable Sync on iOS" />
 </div>
 
+#### On Android
+
+**Coming soon!** [Sign up to be notified when the app is available on Android]((https://goo.gl/forms/ZwLIfHSGLrYcM6k83).
+
 <a id="how-do-i-create-new-entries">
 ### How do I create new entries?
 
@@ -56,7 +60,7 @@ When you are logged into your Firefox Account on Firefox for desktop or mobile, 
 
 You’ll need to edit entries in Firefox. To do this in Firefox for desktop, go to Settings/Preferences, and under the Privacy & Security panel, select the Saved Logins button. Double click on entry information to edit.
 
-To edit entries on Firefox for iOS, go to settings and select the Logins menu under the Privacy section.
+To edit entries on Firefox for iOS or Firefox for Android, go to settings and select the Logins menu under the Privacy section.
 
 <a id="what-security-technology-does-firefox-lockbox-use">
 ### What security technologies does Firefox Lockbox use?
@@ -90,8 +94,14 @@ First, open the Firefox for iOS main menu to see if you are signed in. Once you 
   <img src="/assets/images/faq/manual-sync-refresh.png" alt="Pull to Refresh in Firefox Lockbox" />
 </div>
 
+#### On Android
+
+**Coming soon!** [Sign up to be notified when the app is available on Android]((https://goo.gl/forms/ZwLIfHSGLrYcM6k83).
+
 <a id="how-do-i-set-up-autofill">
 ### How do I set up AutoFill?
+
+#### On iOS
 
 If you just downloaded Firefox Lockbox, you’ll start with a screen which includes “Set Up Autofill”, which takes you directly to your device settings.
 
@@ -112,3 +122,7 @@ If you’re already using Firefox Lockbox, you can set Lockbox to autofill your 
 If you haven’t yet signed in to Lockbox, you will be prompted to do so in order to authenticate the app to automatically fill passwords.
 
 Your setup is now complete. You can now start using your saved logins in Lockbox.
+
+#### On Android
+
+**Coming soon!** [Sign up to be notified when the app is available on Android]((https://goo.gl/forms/ZwLIfHSGLrYcM6k83).
