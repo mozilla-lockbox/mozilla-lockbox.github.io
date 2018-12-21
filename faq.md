@@ -48,7 +48,7 @@ Once you are signed in to your account, you can select “Sync Now” to send yo
 
 #### On Android
 
-**Coming soon!** [Sign up to be notified when the app is available on Android]((https://goo.gl/forms/ZwLIfHSGLrYcM6k83).
+**Coming soon!** [Sign up to be notified when the app is available on Android](https://goo.gl/forms/ZwLIfHSGLrYcM6k83).
 
 <a id="how-do-i-create-new-entries">
 ### How do I create new entries?
@@ -96,7 +96,7 @@ First, open the Firefox for iOS main menu to see if you are signed in. Once you 
 
 #### On Android
 
-**Coming soon!** [Sign up to be notified when the app is available on Android]((https://goo.gl/forms/ZwLIfHSGLrYcM6k83).
+**Coming soon!** [Sign up to be notified when the app is available on Android](https://goo.gl/forms/ZwLIfHSGLrYcM6k83).
 
 <a id="how-do-i-set-up-autofill">
 ### How do I set up AutoFill?
@@ -125,4 +125,4 @@ Your setup is now complete. You can now start using your saved logins in Lockbox
 
 #### On Android
 
-**Coming soon!** [Sign up to be notified when the app is available on Android]((https://goo.gl/forms/ZwLIfHSGLrYcM6k83).
+**Coming soon!** [Sign up to be notified when the app is available on Android](https://goo.gl/forms/ZwLIfHSGLrYcM6k83).
