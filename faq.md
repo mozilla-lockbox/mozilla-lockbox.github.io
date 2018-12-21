@@ -5,7 +5,7 @@ title: FAQ
 
 ### What is Firefox Lockbox?
 
-Firefox Lockbox is an experimental product from Mozilla, the makers of Firefox. It’s an app for iPhone ([sign up to be notified when the Android app is available]((https://goo.gl/forms/ZwLIfHSGLrYcM6k83)) that gives you access to passwords you’ve saved to Firefox.  
+Firefox Lockbox is an experimental product from Mozilla, the makers of Firefox. It’s an app for iPhone ([sign up to be notified when the Android app is available](https://goo.gl/forms/ZwLIfHSGLrYcM6k83)) that gives you access to passwords you’ve saved to Firefox.  
 
 <a id="how-do-i-use-firefox-lockbox">
 ### How do I get my saved logins into Firefox Lockbox?
