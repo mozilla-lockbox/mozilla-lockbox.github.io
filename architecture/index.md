@@ -17,7 +17,7 @@ Other technical documents and resources can be found in the code repositories:
 Component                           | Documentation                       | Status | Coverage
 ---                                 | ---                                 | ---    | ---
 [Data Store prototype][datastore-repo]        | [data-store][datastore-docs]        | [![Build Status][datastore-travis-image]][datastore-travis-link] | [![Coverage Status][datastore-codecov-image]][datastore-codecov-link]
-[Firefox extension prototype][extension-repo] | [lockbox-extension][extension-docs] | [![Build Status][extension-travis-image]][extension-travis-link] |  [![Coverage Status][extension-codecov-image]][extension-codecov-link]
+[Firefox extension prototype][extension-repo] | | [![Build Status][extension-travis-image]][extension-travis-link] |  [![Coverage Status][extension-codecov-image]][extension-codecov-link]
 [iOS application][ios-repo]         | [lockbox-ios][ios-docs]             | [![BuddyBuild][buddybuild-image]][buddybuild-link] | [![Coverage Status][ios-codecov-image]][ios-codecov-link]
 [Android application][android-repo]         | [lockbox-android][android-docs]             | [![Build Status][bitrise-image]][bitrise-link] | [![codecov][codecov-image]][codecov-link]
 [Project documentation][docs-repo]  | [mozilla-lockbox][website]
@@ -35,7 +35,6 @@ helpful reference.
 [datastore-codecov-link]: https://codecov.io/gh/mozilla-lockbox/lockbox-datastore
 
 [extension-repo]: https://github.com/mozilla-lockbox/lockbox-extension
-[extension-docs]: https://mozilla-lockbox.github.io/lockbox-extension/
 [extension-travis-image]: https://travis-ci.org/mozilla-lockbox/lockbox-extension.svg?branch=master
 [extension-travis-link]: https://travis-ci.org/mozilla-lockbox/lockbox-extension
 [extension-codecov-image]: https://img.shields.io/codecov/c/github/mozilla-lockbox/lockbox-extension.svg
