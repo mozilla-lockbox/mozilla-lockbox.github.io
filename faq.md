@@ -49,7 +49,19 @@ Once you are signed in to your account, you can select “Sync Now” to send yo
 
 #### On Android
 
-**Coming soon!** [Sign up to be notified when the app is available on Android](https://goo.gl/forms/ZwLIfHSGLrYcM6k83).
+To begin syncing between Firefox for Android and the Firefox Lockbox app, you’ll need to sign in to your Firefox Account on Firefox. You’ll find the sign-in screen under **Settings** in the main menu.
+
+<div class="image-grid">
+  <img src="/assets/images/faq/sync-android-1.png" alt="Enable Sync on Android" />
+  <img src="/assets/images/faq/sync-android-2.png" alt="Enable Sync on Android" />
+</div>
+
+Once you are signed in to your account, you can select “Sync Now” to send your saved logins to Firefox Lockbox. If you are already signed in to your account, ensure the **Logins**Firefox  item within Sync Settings is checked in order to sync your logins to Firefox Lockbox.
+
+<div class="image-grid">
+  <img src="/assets/images/faq/sync-android-3.png" alt="Enable Sync on Android" />
+  <img src="/assets/images/faq/sync-android-4.png" alt="Enable Sync on Android" />
+</div>
 
 <a id="how-do-i-create-new-entries">
 ### How do I create new entries?
@@ -83,7 +95,7 @@ First, open Firefox for desktop and open the main menu to see if you are signed 
 
 <div class="image-grid">
   <img src="/assets/images/faq/manual-sync-desktop.png" alt="Manual Sync on Desktop" />
-  <img src="/assets/images/faq/manual-sync-refresh.png" alt="Pull to Refresh in Lockbox" />
+  <img src="/assets/images/faq/manual-sync-refresh.png" alt="Pull to Refresh in Firefox Lockbox for iOS" />
 </div>
 
 #### On iOS
@@ -92,12 +104,17 @@ First, open the Firefox for iOS main menu to see if you are signed in. Once you 
 
 <div class="image-grid">
   <img src="/assets/images/faq/manual-sync-ios.png" alt="Manual Sync on iOS" />
-  <img src="/assets/images/faq/manual-sync-refresh.png" alt="Pull to Refresh in Firefox Lockbox" />
+  <img src="/assets/images/faq/manual-sync-refresh.png" alt="Pull to Refresh in Firefox Lockbox for iOS" />
 </div>
 
 #### On Android
 
-**Coming soon!** [Sign up to be notified when the app is available on Android](https://goo.gl/forms/ZwLIfHSGLrYcM6k83).
+First, open the Firefox for Android main menu to see if you are signed in. Once you are signed in, select “Sync Now” under your display name. Now, open the Firefox Lockbox mobile app and pull down on the list of logins to refresh the list. If you don’t see your logins in Firefox Lockbox, wait a few minutes and refresh again.
+
+<div class="image-grid">
+  <img src="/assets/images/faq/manual-sync-android.png" alt="Manual Sync on Android" />
+  <img src="/assets/images/faq/manual-sync-refresh-android.png" alt="Pull to Refresh in Firefox Lockbox for Android" />
+</div>
 
 <a id="how-do-i-set-up-autofill">
 ### How do I set up AutoFill?
@@ -107,14 +124,14 @@ First, open the Firefox for iOS main menu to see if you are signed in. Once you 
 If you just downloaded Firefox Lockbox, you’ll start with a screen which includes “Set Up Autofill”, which takes you directly to your device settings.
 
 <div class="image-grid">
-  <img src="/assets/images/faq/autofill-onboarding.png" alt="AutoFill Onboarding" />
-  <img src="/assets/images/faq/autofill-settings.png" alt="Settings - AutoFill Passwords" />
+  <img src="/assets/images/faq/autofill-onboarding.png" alt="AutoFill Onboarding on iOS" />
+  <img src="/assets/images/faq/autofill-settings.png" alt="Settings - AutoFill Passwords on iOS" />
 </div>
 
 Here you can select Firefox Lockbox to autofill logins for you. You also want to make sure that “AutoFill Passwords” is green and toggled on.
 
 <div class="image-grid">
-  <img src="/assets/images/faq/autofill-password-settings.png" alt="Settings - Passwords and Accounts" />
+  <img src="/assets/images/faq/autofill-password-settings.png" alt="Settings - Passwords and Accounts on iOS" />
   <img src="/assets/images/faq/autofill-signin.png" alt="Settings - Sign in Required" />
 </div>
 
@@ -126,4 +143,16 @@ Your setup is now complete. You can now start using your saved logins in Lockbox
 
 #### On Android
 
-**Coming soon!** [Sign up to be notified when the app is available on Android](https://goo.gl/forms/ZwLIfHSGLrYcM6k83).
+If you just downloaded Firefox Lockbox, you’ll start with a screen which includes “Set Up Autofill,” which takes you directly to Autofill service settings. Choose Firefox Lockbox from the list. 
+
+<div class="image-grid">
+  <img src="/assets/images/faq/autofill-onboarding-android.png" alt="Autofill Onboarding on Android" />
+  <img src="/assets/images/faq/autofill-settings-android.png" alt="Settings - Autofill on Android" />
+</div>
+
+If you skipped this step during set-up, you can go to the Firefox Lockbox settings and turn on Autofill. You can also update this from your device settings: Go to Settings, search for “Autofill” or go to “Languages & input” and select “Autofill service.” Then, choose Firefox Lockbox from the list.
+
+<div class="image-grid">
+  <img src="/assets/images/faq/system-settings-android.png" alt="Settings - System on Android" />
+  <img src="/assets/images/faq/input-settings-android.png" alt="Settings - Languages and Input on Android" />
+</div>
