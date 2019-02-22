@@ -56,7 +56,7 @@ To begin syncing between Firefox for Android and the Firefox Lockbox app, you’
   <img src="/assets/images/faq/sync-android-2.png" alt="Enable Sync on Android" />
 </div>
 
-Once you are signed in to your account, you can select “Sync Now” to send your saved logins to Firefox Lockbox. If you are already signed in to your account, ensure the **Logins**Firefox  item within Sync Settings is checked in order to sync your logins to Firefox Lockbox.
+Once you are signed in to your account, you can select “Sync Now” to send your saved logins to Firefox Lockbox. If you are already signed in to your account, ensure the **Logins** Firefox item within Sync Settings is checked in order to sync your logins to Firefox Lockbox.
 
 <div class="image-grid">
   <img src="/assets/images/faq/sync-android-3.png" alt="Enable Sync on Android" />
