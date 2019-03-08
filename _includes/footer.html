@@ -1,50 +1,22 @@
 <footer class="site-footer">
-
   <div class="wrapper">
-
-    <div class="footer-col-wrapper">
-      <div class="footer-col footer-col-1">
-        <h5>Contact Us</h5>
-        <ul class="contact-list">
-          <!-- <li>
-            {% if site.author %}
-              {{ site.author | escape }}
-            {% else %}
-              {{ site.title | escape }}
-            {% endif %}
-            </li> -->
-            {% if site.email %}
-            <li>
-              <svg class="icon icon-mail">
-                <use xlink:href="{{relativeBase}}assets/images/mail.svg#mail"></use>
-              </svg>
-              <a href="mailto:{{ site.email }}">{{ site.email }}</a></li>
-            {% endif %}
-        </ul>
-        <ul class="social-media-list">
-          {% if site.github_username %}
-          <li>
-            {% include icon-github.html username=site.github_username %}
-          </li>
-          {% endif %}
-
-          {% if site.twitter_username %}
-          <li>
-            {% include icon-twitter.html username=site.twitter_username %}
-          </li>
-          {% endif %}
-        </ul>
-      </div>
-
-      <div class="footer-col footer-col-2">
-        <ul class="site-info">
-          <li><h2 class="footer-heading">{{ site.title | escape }}</h2></li>
-          <!-- <li><p>{{- site.description | escape -}}</p></li> -->
-        </ul>
-      </div>
-
-    </div>
-
+  <a href="mozilla.org" class="mozilla-link">
+    <img src="{{relativeBase}}assets/images/mozilla.svg" alt="Mozilla" width="100" height="32" />
+  </a>
+  <div class="footer-links">
+    {% assign page_paths = site.footer_pages | default: default_paths %}
+    {% for path in page_paths %}
+    {% assign my_page = site.pages | where: "path", path | first %}
+    {% if my_page.title %}
+      <a class="page-link" href="{{ my_page.url | relative_url }}">{{ my_page.title | escape }}</a>
+    {% endif %}
+    {% endfor %}
+    {% if site.github_username %}
+      <a class="page-link" href="https://github.com/{{site.github_username}}">GitHub</a>
+    {% endif %}
+    {% if site.email %}
+      <a class="page-link" href="mailto:{{site.email}}">Contact</a>
+    {% endif %}
   </div>
-
+  </div>
 </footer>
