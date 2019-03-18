@@ -13,13 +13,9 @@ plugins:
 header_pages:
   - faq.md
   - privacy.md
-  - process.md
-  - architecture/index.md
 
 footer_pages:
 - faq.md
 - privacy.md
-- process.md
-- architecture/index.md
 
 include: [".well-known"]
