@@ -1,7 +1,9 @@
 title: Firefox Lockbox
 author: Mozilla
-email: lockbox-dev@mozilla.com
+email: lockbox-contact@mozilla.com
 github_username: mozilla-lockbox
+android_link: https://play.google.com/store/apps/details?id=mozilla.lockbox
+ios_link: https://itunes.apple.com/us/app/firefox-lockbox/id1314000270?ls=1&mt=8
 
 theme: minima
 
@@ -13,5 +15,11 @@ header_pages:
   - privacy.md
   - process.md
   - architecture/index.md
+
+footer_pages:
+- faq.md
+- privacy.md
+- process.md
+- architecture/index.md
 
 include: [".well-known"]

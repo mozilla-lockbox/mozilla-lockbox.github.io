@@ -1,0 +1,32 @@
+---
+layout: home
+---
+
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+
+{%- include head.html -%}
+
+  <body class="home">
+    <main class="home__content" aria-label="Content">
+        <div class="home__left">
+          <div class="home__left-inner">
+            <img class="home__title" src="{{relativeBase}}assets/images/lockbox-logo.svg" alt="{{ site.title | escape }}">
+            <h1>{{ content }}</h1>
+          </div>
+        <div class="home__app-buttons">
+          <a class="app-store" href="{{ site.ios_link | escape }}">
+            <img src="{{relativeBase}}assets/images/app-store.svg" alt="Apple App Store" height=" 50">
+          </a>
+          <a class="google-play-store" href="{{ site.android_link | escape }}">
+            <img src="{{relativeBase}}assets/images/gps.svg" height=" 50" alt="Google Play Store">
+          </a>
+        </div>
+        </div>
+        <div class="home__content-right">
+          <img src="./assets/images/devices.png" alt="Firefox Lockbox app on Android and iOS device">
+        </div>
+    </main>
+    {%- include footer.html -%}
+  </body>
+</html>
