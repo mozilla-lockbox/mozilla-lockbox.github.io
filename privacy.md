@@ -7,7 +7,8 @@ Firefox Lockbox allows Firefox Accounts users to access their login and password
 
 Here are the other key things you should know about how Firefox Lockbox’s handles your data:
 
-- Credential data: Your credentials are synced in encrypted form using Firefox Sync. Interaction data. Mozilla receives information about your interaction with Firefox Lockbox, including (1) frequency of editing, viewing, copying, and syncing credentials, (2) whether you are a new or existing Firefox Account user, (3) interactions with Firefox Lockbox menus and icons, (4) length of time the app is in background.
+- Credential data. Your credentials are synced in encrypted form using Firefox Sync.
+- Interaction data. Mozilla receives information about your interaction with Firefox Lockbox, including (1) frequency of editing, viewing, copying, and syncing credentials, (2) whether you are a new or existing Firefox Account user, (3) interactions with Firefox Lockbox menus and icons, (4) length of time the app is in background.
 - Technical data. We receive your device, operating system, version, and language preference. We also receive your IP address in connection with your usage of a Firefox Account.
 - Other Mozilla Services. Firefox Lockbox requires a Firefox Account and uses the Firefox Sync service. 
-- You can learn more about the data collection for Firefox Lockbox [here](https://github.com/mozilla-lockbox/lockbox-ios/blob/master/docs/metrics.md).
+- You can learn more about the data collection for Firefox Lockbox [here](https://github.com/mozilla-lockbox/lockbox-android/blob/master/docs/metrics.md).
