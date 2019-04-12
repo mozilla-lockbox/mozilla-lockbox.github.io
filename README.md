@@ -40,5 +40,5 @@ This project is licensed under the [Mozilla Public License, version 2.0][license
 [org-link]: https://github.com/mozilla-lockbox/
 [website-link]: https://mozilla-lockbox.github.io/
 [contributing-link]: /contributing.md
-[coc-link]: /code_of_conduct.md
+[coc-link]: /CODE_OF_CONDUCT.md
 [license-link]: /LICENSE
