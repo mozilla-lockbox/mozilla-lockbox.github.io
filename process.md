@@ -12,7 +12,7 @@ title: Project Process
 - [Planning and Engineering](#planning-and-engineering)
 	- [Development process overview](#development-process-overview)
 	- [Agile process details](#agile-process-details)
-		- [Waffle-based Kanban](#waffle-based-kanban)
+		- [Kanban](#kanban)
 		- [Estimation translation](#estimation-translation)
 		- [GitHub labels](#github-labels)
 
@@ -27,7 +27,7 @@ title: Project Process
 
 Our intention is to lead the the Lockbox development process with research and user-oriented questions: what do we want or need to learn to achieve our product, business and user goals?
 
-These questions or goals or features or experiments ultimately result in a GitHub issue ("user story") filed in the appropriate repository (e.g.: lockbox-extension for the browser extension, lockbox-ios for the iOS app).
+These questions or goals or features or experiments ultimately result in a GitHub issue ("user story") filed in the appropriate repository (e.g.: lockbox-addon for the browser extension, lockwise-ios for the iOS app).
 
 The flow of a user story could roughly follow this flow:
 
@@ -50,8 +50,6 @@ With a user story — including acceptance criteria and designs — there is op
 Once a user story is confirmed "ready" for engineering to implement (has final designs and approvals), it needs to be prioritized, estimated and scheduled. 
 
 Some issues will be created outside of the above process and jump straight into this flow...
-
-**All issues are automatically reflected on our Waffle.io kanban board used for our planning: [https://waffle.io/mozilla-lockbox/lockbox-extension](https://waffle.io/mozilla-lockbox/lockbox-extension)**
 
 *As a group, during our sprint review session, we...*
 
@@ -119,7 +117,7 @@ Some issues will be created outside of the above process and jump straight into 
 
 ### Agile process details
 
-#### Waffle-based Kanban
+#### Kanban
 
 * **Inbox:** Everything starts here and pops onto the top of the stack. Items we've agreed are to be done get labeled and moved to On Deck.
 

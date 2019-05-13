@@ -10,16 +10,16 @@ Please visit the [Lockbox website][website-link] for more information.
 To build the GitHub-pages style locally, you can use the provided `Dockerfile` to create an image:
 
 ```bash
-git clone https://github.com/mozilla-lockbox/mozilla-lockbox.github.io
-cd mozilla-lockbox.github.io
-docker build --tag mozilla-lockbox.github.io .
+git clone https://github.com/mozilla-lockwise/mozilla-lockwise.github.io
+cd mozilla-lockwise.github.io
+docker build --tag mozilla-lockwise.github.io .
 ```
 
 Then create and run a container to run a local Jekyll server:
 
 ```bash
-cd mozilla-lockbox.github.io
-docker run --rm --tty --interactive --publish 4000:4000 --volume $PWD:/srv/jekyll mozilla-lockbox.github.io
+cd mozilla-lockwise.github.io
+docker run --rm --tty --interactive --publish 4000:4000 --volume $PWD:/srv/jekyll mozilla-lockwise.github.io
 ```
 
 The documentation can be seen and tracked by opening a web browser to `http://localhost:4000/`.
@@ -36,9 +36,9 @@ This project is governed by a [Code Of Conduct][coc-link].
 
 This project is licensed under the [Mozilla Public License, version 2.0][license-link].
 
-[repo-link]: https://github.com/mozilla-lockbox/mozilla-lockbox.github.io
-[org-link]: https://github.com/mozilla-lockbox/
-[website-link]: https://mozilla-lockbox.github.io/
+[repo-link]: https://github.com/mozilla-lockwise/mozilla-lockwise.github.io
+[org-link]: https://github.com/mozilla-lockwise/
+[website-link]: https://mozilla-lockwise.github.io/
 [contributing-link]: /contributing.md
 [coc-link]: /CODE_OF_CONDUCT.md
 [license-link]: /LICENSE
