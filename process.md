@@ -25,9 +25,9 @@ title: Project Process
 
 ## User Story Creation
 
-Our intention is to lead the the Lockbox development process with research and user-oriented questions: what do we want or need to learn to achieve our product, business and user goals?
+Our intention is to lead the the development process with research and user-oriented questions: what do we want or need to learn to achieve our product, business and user goals?
 
-These questions or goals or features or experiments ultimately result in a GitHub issue ("user story") filed in the appropriate repository (e.g.: lockbox-addon for the browser extension, lockwise-ios for the iOS app).
+These questions or goals or features or experiments ultimately result in a GitHub issue ("user story") filed in the appropriate repository (e.g.: lockwise-addon for the browser extension, lockwise-ios for the iOS app).
 
 The flow of a user story could roughly follow this flow:
 

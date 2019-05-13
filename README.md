@@ -1,9 +1,9 @@
-# Lockbox
+# Firefox Lockwise
 
 [This][repo-link] is a meta-repository to gather documentation and project-wide
-tasks for Mozilla's experimental [Lockbox product][org-link].
+tasks for Mozilla's experimental [Lockwise product][org-link] (formerly known as Lockbox).
 
-Please visit the [Lockbox website][website-link] for more information.
+Please visit the [Lockwise website][website-link] for more information.
 
 ## Building Locally ##
 
