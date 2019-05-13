@@ -337,7 +337,7 @@ h1.post-title {
 
     .page-link {
       color: $link-grey;
-      font-size: .75rem;
+      font-size: 1rem;
     }
 
     &::after {
@@ -348,7 +348,7 @@ h1.post-title {
 
 .site-footer {
   .page-link:not(:last-child) {
-    margin-right: 20px;
+    margin-right: 32px;
   }
 }
 
