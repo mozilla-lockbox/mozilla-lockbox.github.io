@@ -1,6 +1,6 @@
 ---
 layout: home
-title: Firefox Lockbox
+title: Firefox Lockwise
 ---
 
 Take your passwords everywhere.
