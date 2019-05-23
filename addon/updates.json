@@ -1,0 +1,16 @@
+{
+  "addons": {
+    "lockbox@mozilla.com": {
+      "updates": [
+        {
+          "version": "2.2.1-alpha",
+          "update_link": "https://github.com/mozilla-lockwise/lockwise-addon/releases/download/2.2.1-alpha/lockwise-signed.xpi"
+        },
+        {
+          "version": "2.2.0-alpha",
+          "update_link": "https://github.com/mozilla-lockwise/lockwise-addon/releases/download/2.2.0-alpha/lockwise-signed.xpi"
+        }
+      ]
+    }
+  }
+}
