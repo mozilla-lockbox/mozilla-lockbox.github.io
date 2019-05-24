@@ -206,6 +206,30 @@ h1.post-title {
     flex-direction: row;
   }
 
+  .home__extension-link:before {
+    content: "Try the Lockwise add-on";
+    color: #20123a;
+  }
+
+  .home__extension-link {
+    align-self: flex-start;
+    margin-left: 13%;
+    font-size: 18px;
+    letter-spacing: -0.6px;
+    text-align: center;
+    text-decoration: none;
+    color: #ffffff;
+
+    .button {
+      min-width: 195px;
+      height: auto;
+      padding: 12px;
+      margin-top: 12px;
+      border-radius: 4px;
+      background-color: #393473;
+    }
+  }
+
   h1 {
     font-size: 36px;
     line-height: 1.17;
@@ -242,6 +266,10 @@ h1.post-title {
       a:first-child {
         padding-right: 8px;
       }
+    }
+    
+    .home__extension-link {
+      display: none;
     }
 
     .home__content-right {
@@ -284,7 +312,7 @@ h1.post-title {
       align-items: flex-start;
       display: flex;
       flex-direction: column;
-      flex: 1 0 45%;
+      flex: 1 0 0%;
       justify-content: space-between;
     }
 
@@ -293,10 +321,10 @@ h1.post-title {
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
-      flex: 1 0 55%;
+      flex: 1 0 10%;
 
       a {
-        bottom: 44px;
+        flex-basis: content;
         position: relative;
       }
 

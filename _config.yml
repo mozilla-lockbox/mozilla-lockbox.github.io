@@ -4,6 +4,7 @@ email: lockwise-contact@mozilla.com
 github_username: mozilla-lockwise
 android_link: https://app.adjust.com/eu4xdqg?redirect=https://play.google.com/store/apps/details?id=mozilla.lockbox
 ios_link: https://app.adjust.com/eu4xdqg?redirect=https://itunes.apple.com/us/app/firefox-lockbox/id1314000270?mt=8
+addon_link: https://github.com/mozilla-lockwise/lockwise-addon/releases/download/2.2.2-alpha/lockwise-signed-2.2.2-alpha.xpi
 
 theme: minima
 
