@@ -386,8 +386,16 @@ h1.post-title {
     height: 72px;
   }
 }
+.home .site-footer {
+  position: fixed;
+  bottom: 0;
+}
+
 
 @media screen and (max-width: 768px) {
+  .home .site-footer {
+    position: relative;
+  }
   .site-footer {
     padding-bottom: 16px;
 
