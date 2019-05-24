@@ -158,3 +158,10 @@ If you skipped this step during set-up, you can go to the Firefox Lockwise setti
   <img src="/assets/images/faq/system-settings-android.png" alt="Settings - System on Android" />
   <img src="/assets/images/faq/input-settings-android.png" alt="Settings - Languages and Input on Android" />
 </div>
+
+<a name="does-firefox-lockwise-for-desktop-addon-work-with-the-master-password-feature-in-firefox" />
+### Does Firefox Lockwise for Desktop Addon work with the Master Password feature in Firefox?
+
+At this time, the Desktop addon does _**not**_ work if you have Master Password enabled.  If you wish to use this addon, first disable Master Password, then install or re-enable Firefox Lockwise in the browser.
+
+In future versions of Firefox, this feature will be built in and will work with the Master Password feature.  This addon is a preview of what's to come built into Firefox!
