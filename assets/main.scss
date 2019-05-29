@@ -377,14 +377,23 @@ h1.post-title {
 .home .site-header {
   background-color: #fff;
   height: 48px;
+  align-items: center;
   @media screen and (min-width: $on-palm) {
     position: fixed;
+  }
+  img {
+    width: 24px;
+    margin-left: 16px;
+    @media screen and (min-width: $on-palm) {
+      margin-left: auto;
+    }
   }
   p {
     font-size: 16px;
     color: #0C0C0D;
-    flex: auto;
+    padding: 16px;
     margin-bottom: 0;
+    margin-right: auto;
     @media screen and (min-width: $on-palm) {
       text-align: center;
     }
