@@ -374,6 +374,26 @@ h1.post-title {
   }
 }
 
+.home .site-header {
+  background-color: #fff;
+  height: 48px;
+  @media screen and (min-width: $on-palm) {
+    position: fixed;
+  }
+  p {
+    font-size: 16px;
+    color: #0C0C0D;
+    flex: auto;
+    margin-bottom: 0;
+    @media screen and (min-width: $on-palm) {
+      text-align: center;
+    }
+    a {
+      text-decoration: underline;
+    }
+  }
+}
+
 .site-footer {
   .page-link:not(:last-child) {
     margin-right: 32px;
