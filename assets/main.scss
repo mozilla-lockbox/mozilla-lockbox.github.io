@@ -3,7 +3,7 @@
 @import "minima";
 
 // MINIMA RESETS
-$on-palm: 672px;
+$on-palm: 660px;
 $on-laptop: 769px;
 $base-font-family: 'Inter', sans-serif;
 
@@ -267,7 +267,7 @@ h1.post-title {
         padding-right: 8px;
       }
     }
-    
+
     .home__extension-link {
       display: none;
     }
@@ -293,7 +293,7 @@ h1.post-title {
 
 @media screen and (min-width: $on-laptop) {
   .home {
-    grid-template-rows: auto 96px;
+    grid-template-rows: 48px auto 96px;
     justify-items: center;
   }
 
@@ -376,27 +376,35 @@ h1.post-title {
 
 .home .site-header {
   background-color: #fff;
+  border-bottom: 1px solid #f0f0f4;
+  justify-content: center;
+  padding: 0 16px;
+  min-height: 48px;
   height: 48px;
-  align-items: center;
-  @media screen and (min-width: $on-palm) {
-    position: fixed;
-  }
+
+    @media screen and (max-width: 640px) {
+      min-height: 60px;
+      height: 60px;
+    }
+
   img {
-    width: 24px;
-    margin-left: 16px;
-    @media screen and (min-width: $on-palm) {
-      margin-left: auto;
+    flex: 0 0 24px;
+    margin-right: 16px;
+
+    @media screen and (max-width: 640px) {
+      margin-right: 8px;
     }
   }
+
   p {
-    font-size: 16px;
     color: #0C0C0D;
-    padding: 16px;
-    margin-bottom: 0;
-    margin-right: auto;
-    @media screen and (min-width: $on-palm) {
-      text-align: center;
+    font-size: 16px;
+    margin: 0;
+
+    @media screen and (max-width: 640px) {
+      font-size: 12px;
     }
+
     a {
       text-decoration: underline;
     }
@@ -409,12 +417,6 @@ h1.post-title {
   }
 }
 
-.site-header {
-  height: 40px;
-  @media screen and (min-width: $on-palm) {
-    height: 72px;
-  }
-}
 .home .site-footer {
   position: fixed;
   bottom: 0;
