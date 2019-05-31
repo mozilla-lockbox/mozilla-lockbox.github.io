@@ -25,8 +25,8 @@ layout: home
           <a class="google-play-store" href="{{ site.android_link | escape }}">
             <img src="{{relativeBase}}assets/images/gps.svg" height="50" alt="Google Play Store">
           </a>
-          <a class="home__extension-link" href="{{ site.addon_link | escape }}">
-            <p class="button">Install for Firefox</p>
+          <a class="home__extension-link" href="{{ site.fx_link | escape }}">
+            <p class="button">Get Firefox</p>
           </a>
         </div>
         </div>
@@ -35,5 +35,6 @@ layout: home
         </div>
     </main>
     {%- include footer.html -%}
+    <script type="text/javascript" src="{{relativeBase}}assets/compatcheck.js"></script>
   </body>
 </html>
