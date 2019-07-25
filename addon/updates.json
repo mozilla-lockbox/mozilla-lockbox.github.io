@@ -6,7 +6,8 @@
           "version": "2.2.4-alpha",
           "applications": {
             "gecko": {
-              "strict_min_version": "67.0"
+              "strict_min_version": "67.0",
+              "strict_max_version": "69.0"
             }
           },
           "update_link": "https://github.com/mozilla-lockwise/lockwise-addon/releases/download/2.2.4-alpha/lockwise-signed.xpi"
@@ -15,7 +16,8 @@
           "version": "2.2.3-alpha",
           "applications": {
             "gecko": {
-              "strict_min_version": "67.0"
+              "strict_min_version": "67.0",
+              "strict_max_version": "69.0"
             }
           },
           "update_link": "https://github.com/mozilla-lockwise/lockwise-addon/releases/download/2.2.3-alpha/lockwise-signed.xpi"
@@ -24,7 +26,8 @@
           "version": "2.2.2-alpha",
           "applications": {
             "gecko": {
-              "strict_min_version": "67.0"
+              "strict_min_version": "67.0",
+              "strict_max_version": "69.0"
             }
           },
           "update_link": "https://github.com/mozilla-lockwise/lockwise-addon/releases/download/2.2.2-alpha/lockwise-signed-2.2.2-alpha.xpi"
@@ -33,7 +36,8 @@
           "version": "2.2.1-alpha",
           "applications": {
             "gecko": {
-              "strict_min_version": "67.0"
+              "strict_min_version": "67.0",
+              "strict_max_version": "69.0"
             }
           },
           "update_link": "https://github.com/mozilla-lockwise/lockwise-addon/releases/download/2.2.1-alpha/lockwise-signed.xpi"
@@ -42,7 +46,8 @@
           "version": "2.2.0-alpha",
           "applications": {
             "gecko": {
-              "strict_min_version": "67.0"
+              "strict_min_version": "67.0",
+              "strict_max_version": "69.0"
             }
           },
           "update_link": "https://github.com/mozilla-lockwise/lockwise-addon/releases/download/2.2.0-alpha/lockwise-signed.xpi"
