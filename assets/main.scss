@@ -11,7 +11,24 @@ $base-font-family: 'Inter', sans-serif;
 $link-grey: #5e5e72;
 $on-large-laptop: 1112px;
 
+/**
+ * No-JS fix for nav menu not being dismissable by clicking outside of menu (issue #89)
+ */
+.site-nav {
+  z-index: 1;
 
+  input:checked ~ label[for="nav-trigger"]::after {
+    content: "";
+    cursor: default;
+    display: block;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+  }
+}
 
 // GLOBAL RULES
 html {
